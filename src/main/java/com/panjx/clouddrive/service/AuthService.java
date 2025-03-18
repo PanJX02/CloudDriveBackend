@@ -1,15 +1,13 @@
 package com.panjx.clouddrive.service;
 
+import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.User;
-
 import com.panjx.clouddrive.pojo.UserDTO;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface UserService {
+public interface AuthService {
 
-
-    User findByUsername(String username);
-
-    void register( UserDTO userDTO);
+    Result authenticate(UserDTO userDTO);
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.panjx.clouddrive.mapper.FolderMapper">
+    <!-- 自定义结果映射（处理字段类型转换） -->
+    <resultMap id="UserFileResultMap" type="com.panjx.clouddrive.pojo.UserFile">
+        <id property="id" column="uf_id"/>
+        <result property="userId" column="user_id" javaType="long"/>
+        <result property="fileId" column="file_id" javaType="long"/>
+        <result property="fileSHA256" column="file_sha256"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileExtension" column="file_extension"/>
+        <result property="fileCategory" column="file_category"/>
+        <result property="fileSize" column="file_size" javaType="java.lang.String"/>
+        <result property="filePid" column="file_pid" javaType="long"/>
+        <result property="folderType" column="folder_type"/>
+        <result property="deleteFlag" column="del_flag"/>
+        <result property="recoveryTime" column="recovery_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+    </resultMap>
+    <!-- 核心查询语句 -->
+    <select id="getFileList" resultMap="UserFileResultMap">
+        SELECT
+        uf.id AS uf_id,
+        uf.user_id,
+        uf.file_id,
+        f.file_sha256,
+        uf.file_name,
+        uf.file_extension,
+        uf.file_category,
+        f.file_size,
+        uf.file_pid,
+        uf.folder_type,
+        uf.del_flag,
+        uf.recovery_time,
+        uf.create_time,
+        uf.last_update_time
+        FROM user_file uf
+        LEFT JOIN file f ON uf.file_id = f.id
+        WHERE
+        uf.user_id = #{userId}      -- 参数直接匹配
+        AND uf.file_pid = #{filePid}
+        AND uf.del_flag = 2
+        ORDER BY
+        uf.folder_type DESC,  <!-- 文件夹优先 -->
+        uf.file_name ASC      <!-- 新增文件名升序 -->
+    </select>
+
+</mapper>

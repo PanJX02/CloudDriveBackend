@@ -27,8 +27,8 @@ public class UserController {
             User u = userService.findByUsername(userDTO.getUsername());
             if (u==null){
                 //注册
-                userService.register(userDTO);
-                return Result.success();
+                String token = userService.register(userDTO);
+                return Result.success(token);
             }else {
                 //用户名已存在
                 return Result.error("用户名已存在");

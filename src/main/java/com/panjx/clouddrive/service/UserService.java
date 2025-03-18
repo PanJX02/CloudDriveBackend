@@ -11,5 +11,5 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    void register( UserDTO userDTO);
+    String register( UserDTO userDTO);
 }

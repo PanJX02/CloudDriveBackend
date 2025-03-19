@@ -18,7 +18,7 @@ public class UserFile {
     private String fileName;
     private String fileExtension;
     private String fileCategory;
-    private String fileSize;
+    private long fileSize;
     private long filePid;
     private int folderType;
     private int deleteFlag;

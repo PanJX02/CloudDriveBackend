@@ -1,5 +1,7 @@
 package com.panjx.clouddrive.controller;
 
+import com.panjx.clouddrive.pojo.FileList;
+import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.service.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,11 @@ public class FolderController {
     private FolderService folderService;
 
     @GetMapping("/{folderId}/files")
-    public String getFiles(@PathVariable String folderId) {
-        return "fileList";
+    public Result getFiles(@PathVariable String folderId) {
+        FileList fileList = folderService.getFiles(Long.valueOf(folderId));
+        if (fileList != null) {
+            return Result.success(fileList);
+        }
+        return Result.error("获取文件列表失败");
     }
 }

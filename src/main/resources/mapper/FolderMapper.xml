@@ -10,7 +10,7 @@
         <result property="fileName" column="file_name"/>
         <result property="fileExtension" column="file_extension"/>
         <result property="fileCategory" column="file_category"/>
-        <result property="fileSize" column="file_size" javaType="java.lang.String"/>
+        <result property="fileSize" column="file_size" javaType="long"/>
         <result property="filePid" column="file_pid" javaType="long"/>
         <result property="folderType" column="folder_type"/>
         <result property="deleteFlag" column="del_flag"/>

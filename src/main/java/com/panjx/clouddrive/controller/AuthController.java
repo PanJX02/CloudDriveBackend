@@ -7,16 +7,15 @@ import com.panjx.clouddrive.service.AuthService;
 import com.panjx.clouddrive.service.UserService;
 import com.panjx.clouddrive.utils.PasswordUtil;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping ("/auth")
 public class AuthController {
@@ -28,6 +27,7 @@ public class AuthController {
     public Result login(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult)
     {
         // 检查验证结果
+        log.info("获取token");
         if (bindingResult.hasErrors()) {
             // 获取第一个错误信息
             String errorMessage = bindingResult.getAllErrors().getFirst().getDefaultMessage();
@@ -37,5 +37,17 @@ public class AuthController {
         // 登录
         return authService.authenticate(userDTO);
 
+    }
+    
+    @PostMapping("/refresh")
+    public Result refreshToken(@RequestBody Map<String, String> requestBody) {
+        String refreshToken = requestBody.get("refreshToken");
+        
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            return Result.error("刷新令牌不能为空");
+        }
+        
+        log.info("刷新令牌");
+        return authService.refreshToken(refreshToken);
     }
 }

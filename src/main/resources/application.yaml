@@ -11,7 +11,8 @@ spring:
   #mysql连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/clouddrive
+    url: jdbc:mysql://172.17.0.1:3306/clouddrive
+#    url: jdbc:mysql://127.0.0.1:3306/clouddrive
     username: root
     password: 20020920
 
@@ -21,3 +22,9 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
+
+qiniu:
+  kodo:
+    endpoint: https://stl34gw6f.hd-bkt.clouddn.com
+    bucketName: myclouddrive
+    region: cn-east-1

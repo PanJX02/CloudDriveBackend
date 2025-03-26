@@ -1,5 +1,6 @@
 package com.panjx.clouddrive.service;
 
+import com.panjx.clouddrive.pojo.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 
 import com.panjx.clouddrive.pojo.UserDTO;
@@ -11,5 +12,5 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    String register( UserDTO userDTO);
+    TokenResponse register(UserDTO userDTO);
 }

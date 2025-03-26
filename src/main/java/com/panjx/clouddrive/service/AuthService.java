@@ -10,4 +10,6 @@ import org.springframework.stereotype.Service;
 public interface AuthService {
 
     Result authenticate(UserDTO userDTO);
+    
+    Result refreshToken(String refreshToken);
 }

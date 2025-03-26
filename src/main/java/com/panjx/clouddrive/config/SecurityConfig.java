@@ -33,8 +33,8 @@ public class SecurityConfig {
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 允许登录和注册接口匿名访问
-                .requestMatchers("/auth/tokens", "/users").permitAll()
+                // 允许登录、注册和刷新令牌接口匿名访问
+                .requestMatchers("/auth/tokens", "/auth/refresh", "/users").permitAll()
                 // 所有其他请求需要认证
                 .anyRequest().authenticated()
             )

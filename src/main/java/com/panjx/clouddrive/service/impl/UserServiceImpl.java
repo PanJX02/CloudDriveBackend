@@ -1,7 +1,7 @@
 package com.panjx.clouddrive.service.impl;
 
-import com.panjx.clouddrive.mapper.AuthMapper;
 import com.panjx.clouddrive.mapper.UserMapper;
+import com.panjx.clouddrive.pojo.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.service.UserService;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     // 注册
     @Override
-    public String register(UserDTO userDTO) {
+    public TokenResponse register(UserDTO userDTO) {
         //加密
         String password = PasswordUtil.encode(userDTO.getPassword());
 
@@ -35,7 +35,13 @@ public class UserServiceImpl implements UserService {
         User u = new User(null, userDTO.getUsername(), userDTO.getUsername(), userDTO.getEmail(), 0, null, password, timestamp, timestamp, 0, 0L, null);
         userMapper.add(u);
         User user = userMapper.findByUsername(userDTO.getUsername());
-        return JwtUtil.generateToken(user);
+        //生成访问令牌和刷新令牌
+        String accessToken = JwtUtil.generateToken(user);
+        String refreshToken = JwtUtil.generateRefreshToken(user);
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
+
+        //返回令牌
+        return tokenResponse;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.service.UserService;
@@ -27,8 +28,8 @@ public class UserController {
             User u = userService.findByUsername(userDTO.getUsername());
             if (u==null){
                 //注册
-                String token = userService.register(userDTO);
-                return Result.success(token);
+                TokenResponse tokenResponse = userService.register(userDTO);
+                return Result.success(tokenResponse);
             }else {
                 //用户名已存在
                 return Result.error("用户名已存在");

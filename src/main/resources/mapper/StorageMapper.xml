@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.panjx.clouddrive.mapper.StorageMapper">
+    <select id="finByStorageId" resultType="com.panjx.clouddrive.pojo.Storage">
+        select * from storage where storage.storage_id = #{id}
+    </select>
+    <select id="findDefaultStorage" resultType="com.panjx.clouddrive.pojo.Storage">
+        select * from storage where storage.is_default = 1
+    </select>
+</mapper>

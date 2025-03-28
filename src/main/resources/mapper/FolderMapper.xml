@@ -13,7 +13,7 @@
         <result property="fileSize" column="file_size" javaType="long"/>
         <result property="filePid" column="file_pid" javaType="long"/>
         <result property="folderType" column="folder_type"/>
-        <result property="deleteFlag" column="del_flag"/>
+        <result property="deleteFlag" column="delete_flag"/>
         <result property="recoveryTime" column="recovery_time"/>
         <result property="createTime" column="create_time"/>
         <result property="lastUpdateTime" column="last_update_time"/>
@@ -27,20 +27,20 @@
         f.file_sha256,
         uf.file_name,
         uf.file_extension,
-        uf.file_category,
+        f.file_category,
         f.file_size,
         uf.file_pid,
         uf.folder_type,
-        uf.del_flag,
+        uf.delete_flag,
         uf.recovery_time,
         uf.create_time,
         uf.last_update_time
         FROM user_file uf
-        LEFT JOIN file f ON uf.file_id = f.id
+        LEFT JOIN file f ON uf.file_id = f.file_id
         WHERE
         uf.user_id = #{userId}      -- 参数直接匹配
         AND uf.file_pid = #{filePid}
-        AND uf.del_flag = 2
+        AND uf.delete_flag = 2
         ORDER BY
         uf.folder_type DESC,  <!-- 文件夹优先 -->
         uf.file_name ASC      <!-- 新增文件名升序 -->

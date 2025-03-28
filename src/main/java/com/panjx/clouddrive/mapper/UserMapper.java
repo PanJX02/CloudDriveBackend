@@ -10,4 +10,7 @@ public interface UserMapper {
 
     // 注册
     void add(User user);
+
+    //更新用户使用空间
+    void updateUserSpace(long userId, long space);
 }

@@ -18,4 +18,10 @@
         INSERT INTO user (user_name, nick_name, password, join_time, identity)
         VALUES (#{userName}, #{nickName}, #{password}, #{joinTime}, #{identity})
     </insert>
+    <!--更新用户使用空间-->
+    <update id="updateUserSpace">
+        UPDATE user
+        SET use_space = use_space + #{space}
+        WHERE user_id = #{userId}
+    </update>
 </mapper> 

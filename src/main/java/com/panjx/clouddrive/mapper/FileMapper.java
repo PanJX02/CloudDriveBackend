@@ -1,8 +1,8 @@
 package com.panjx.clouddrive.mapper;
 
-import com.panjx.clouddrive.pojo.File;
 import com.panjx.clouddrive.pojo.UserFile;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 
 @Mapper
 public interface FileMapper {
@@ -12,6 +12,10 @@ public interface FileMapper {
 
     // 添加文件
     void addUserFile(UserFile userFile);
+    
+    // 添加文件记录并返回生成的ID
+    @Options(useGeneratedKeys = true, keyProperty = "fileId")
+    Long addFile(UserFile file);
 
     // 通过文件id查找文件
     UserFile findByFileId(long fileId);

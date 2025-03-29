@@ -12,6 +12,36 @@
         insert into user_file(user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag, recovery_time, create_time, last_update_time)
         values (#{userId}, #{fileId}, #{fileName}, #{fileExtension}, #{filePid}, #{folderType}, #{deleteFlag}, #{recoveryTime}, #{createTime}, #{lastUpdateTime})
     </insert>
+    <insert id="addFile" parameterType="com.panjx.clouddrive.pojo.UserFile" useGeneratedKeys="true" keyProperty="fileId">
+        insert into file(
+            file_md5, 
+            file_sha1, 
+            file_sha256,
+            file_category,
+            storage_id,
+            file_size, 
+            file_cover, 
+            refer_count, 
+            status, 
+            transcode_status, 
+            create_time, 
+            last_refer_time
+        )
+        values (
+            #{fileMD5}, 
+            #{fileSHA1}, 
+            #{fileSHA256},
+            #{fileCategory},
+            #{storageId}, 
+            #{fileSize}, 
+            #{fileCover}, 
+            #{referCount}, 
+            1, 
+            #{transcodeStatus}, 
+            #{fileCreateTime}, 
+            #{fileCreateTime}
+        )
+    </insert>
 
     <delete id="deleteUserFile">
 

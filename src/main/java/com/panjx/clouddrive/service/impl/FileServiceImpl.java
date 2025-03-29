@@ -3,7 +3,6 @@ package com.panjx.clouddrive.service.impl;
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.mapper.StorageMapper;
 import com.panjx.clouddrive.mapper.UserMapper;
-import com.panjx.clouddrive.pojo.File;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.Storage;
 import com.panjx.clouddrive.pojo.UploadResponse;
@@ -12,10 +11,12 @@ import com.panjx.clouddrive.service.FileService;
 import com.panjx.clouddrive.utils.KodoUtil;
 import com.panjx.clouddrive.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -83,9 +84,51 @@ public class FileServiceImpl implements FileService {
 
             // 获取七牛云上传token
             String uploadToken = KodoUtil.getUpToken(storage.getEndpoint());
-            
+            String[] domain = {storage.getEndpoint()};
+            // 获取域名
             // 返回上传token给前端
-            return Result.success(UploadResponse.withToken(uploadToken));
+            return Result.success(UploadResponse.withToken(storage.getStorageId(),domain,uploadToken));
         }
+    }
+    
+    @Override
+    @Transactional
+    public Result uploadComplete(UserFile userFile) {
+        log.info("处理上传完成: {}", userFile.getFileName());
+        
+        // 获取当前用户ID并设置
+        Long userId = SecurityUtils.getCurrentUserId();
+        userFile.setUserId(userId);
+        
+        // 设置文件相关属性
+        userFile.setFolderType(0); // 0表示文件
+        userFile.setDeleteFlag(2); // 2表示正常
+        
+        // 设置时间信息
+        long currentTime = System.currentTimeMillis();
+        userFile.setCreateTime(currentTime);
+        userFile.setLastUpdateTime(currentTime);
+        userFile.setFileCreateTime(currentTime); // 设置文件创建时间
+        
+        // 设置引用计数为1 (初始值)
+        userFile.setReferCount(1); 
+        
+        // 设置转码状态为未转码
+        userFile.setTranscodeStatus(0);
+        
+        // 保存文件记录，fileId会在保存过程中被设置到userFile对象
+        fileMapper.addFile(userFile);
+        
+        log.info("已保存文件记录，文件ID: {}", userFile.getFileId());
+        
+        // 添加到用户文件表
+        fileMapper.addUserFile(userFile);
+        
+        // 更新用户使用空间
+        userMapper.updateUserSpace(userId, userFile.getFileSize());
+        
+        log.info("文件上传完成，已保存记录。文件ID: {}", userFile.getFileId());
+        
+        return Result.success("文件上传成功");
     }
 }

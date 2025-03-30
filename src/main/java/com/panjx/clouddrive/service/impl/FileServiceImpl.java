@@ -83,7 +83,7 @@ public class FileServiceImpl implements FileService {
             Storage storage = storageMapper.findDefaultStorage();
 
             // 获取七牛云上传token
-            String uploadToken = KodoUtil.getUpToken(storage.getEndpoint());
+            String uploadToken = KodoUtil.getUpToken(storage.getBucket());
             String[] domain = {storage.getEndpoint()};
             // 获取域名
             // 返回上传token给前端
@@ -129,6 +129,6 @@ public class FileServiceImpl implements FileService {
         
         log.info("文件上传完成，已保存记录。文件ID: {}", userFile.getFileId());
         
-        return Result.success("文件上传成功");
+        return Result.success("文件上传成功",null);
     }
 }

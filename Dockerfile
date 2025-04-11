@@ -5,11 +5,12 @@ RUN apt-get update && \
     apt-get install -y wget && \
     apt-get clean
 
-# 复制本地 .deb 包到镜像（需与 Dockerfile 同目录）
-COPY bellsoft-jdk21.0.6-10-linux-amd64.deb /tmp/
+# 从网络下载 Liberica JDK .deb 包到镜像
+RUN wget -O /tmp/bellsoft-jdk21.0.6+10-linux-amd64.deb \
+    https://download.bell-sw.com/java/21.0.6+10/bellsoft-jdk21.0.6+10-linux-amd64.deb
 
 # 安装 Liberica JDK 21
-RUN dpkg -i /tmp/bellsoft-jdk21.0.6-10-linux-amd64.deb || \
+RUN dpkg -i /tmp/bellsoft-jdk21.0.6+10-linux-amd64.deb || \
     (apt-get update && apt-get install -f -y) && \
     rm -f /tmp/*.deb
 

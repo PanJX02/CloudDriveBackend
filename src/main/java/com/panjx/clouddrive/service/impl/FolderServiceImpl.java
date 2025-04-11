@@ -1,9 +1,8 @@
 package com.panjx.clouddrive.service.impl;
 
-import com.panjx.clouddrive.config.SecurityConfig;
 import com.panjx.clouddrive.mapper.FolderMapper;
-import com.panjx.clouddrive.pojo.FileList;
-import com.panjx.clouddrive.pojo.PageMeta;
+import com.panjx.clouddrive.pojo.response.FileList;
+import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.service.FolderService;
 import com.panjx.clouddrive.utils.SecurityUtils;

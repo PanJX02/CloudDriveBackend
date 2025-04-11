@@ -20,6 +20,15 @@ public interface FileMapper {
     // 通过文件id查找文件
     UserFile findByFileId(long fileId);
 
+    //通过UserFileID查找文件
+    UserFile findByUserFileId(long d);
+
+    // 通过PID查找文件
+    UserFile findByPid(long filePid);
+    
+    // 根据ID查找用户文件信息
+    UserFile findUserFileById(long id);
+    
     // 删除文件
     void deleteUserFile(long id);
 

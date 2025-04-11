@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.pojo;
+package com.panjx.clouddrive.pojo.request;
 
 import lombok.Data;
 

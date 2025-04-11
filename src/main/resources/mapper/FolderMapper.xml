@@ -40,7 +40,7 @@
         WHERE
         uf.user_id = #{userId}      -- 参数直接匹配
         AND uf.file_pid = #{filePid}
-        AND uf.delete_flag = 2
+        AND uf.delete_flag = 0 -- 未放入回收站
         ORDER BY
         uf.folder_type DESC,  <!-- 文件夹优先 -->
         uf.file_name ASC      <!-- 新增文件名升序 -->

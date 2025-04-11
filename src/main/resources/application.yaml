@@ -25,6 +25,6 @@ mybatis:
 
 qiniu:
   kodo:
-    endpoint: https://stl34gw6f.hd-bkt.clouddn.com
+    endpoint: qiniu.65535.xin
     bucketName: myclouddrive
     region: cn-east-1

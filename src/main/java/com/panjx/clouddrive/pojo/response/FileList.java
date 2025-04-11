@@ -1,5 +1,6 @@
-package com.panjx.clouddrive.pojo;
+package com.panjx.clouddrive.pojo.response;
 
+import com.panjx.clouddrive.pojo.UserFile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

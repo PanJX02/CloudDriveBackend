@@ -1,6 +1,6 @@
 package com.panjx.clouddrive.controller;
 
-import com.panjx.clouddrive.pojo.FileList;
+import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.service.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.panjx.clouddrive.service.impl;
 
 import com.panjx.clouddrive.mapper.UserMapper;
-import com.panjx.clouddrive.pojo.TokenResponse;
+import com.panjx.clouddrive.pojo.response.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.service.UserService;

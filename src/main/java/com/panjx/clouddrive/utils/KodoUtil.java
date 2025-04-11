@@ -41,10 +41,12 @@ public class KodoUtil {
         region = this.tempRegion;
     }
 
+    // 获取上传凭证
     public static String getUpToken(String bucket) {
         return auth.uploadToken(bucket);
     }
 
+    // 获取下载链接
     public static String getDownloadUrl(String key,long expireInSeconds) throws QiniuException {
         DownloadUrl url = new DownloadUrl(endpoint, true, key);
         url.setAttname(key); // 配置 attname

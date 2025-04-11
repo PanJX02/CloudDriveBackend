@@ -5,7 +5,21 @@
         select * from file where file_sha256 = #{fileSHA256}
     </select>
     <select id="findByFileId" resultType="com.panjx.clouddrive.pojo.UserFile">
-        select refer_count from file where file_id = #{fileId}
+        select * from file where file_id = #{fileId}
+    </select>
+    <select id="findByUserFileId" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select
+            *
+        FROM
+            user_file
+        where
+            id = #{id}
+    </select>
+    <select id="findByPid" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select * from user_file where file_pid = #{filePid}
+    </select>
+    <select id="findUserFileById" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select * from user_file where id = #{id}
     </select>
 
     <insert id="addUserFile" parameterType="com.panjx.clouddrive.pojo.UserFile">

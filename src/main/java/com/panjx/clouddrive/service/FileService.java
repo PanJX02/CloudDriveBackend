@@ -13,4 +13,9 @@ public interface FileService {
      * 处理文件上传完成后的操作
      */
     Result uploadComplete(UserFile userFile);
+
+    /**
+     * 处理文件下载的操作
+     */
+    Result download(UserFile userFile);
 }

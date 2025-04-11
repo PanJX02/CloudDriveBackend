@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panjx.clouddrive.mapper.AuthMapper;
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.pojo.TokenResponse;
+import com.panjx.clouddrive.pojo.response.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.service.AuthService;

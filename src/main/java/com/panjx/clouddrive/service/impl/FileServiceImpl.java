@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService {
             // 设置文件类型为
             userFile.setFolderType(0); // 0表示文件
             // 设置删除标志为
-            userFile.setDeleteFlag(2); // 2表示正常
+            userFile.setDeleteFlag(0); // 2表示正常
             // 设置创建时间为当前时间
             userFile.setCreateTime(System.currentTimeMillis());
             // 设置最后更新时间为当前时间

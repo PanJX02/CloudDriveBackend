@@ -19,8 +19,8 @@ public class FileController {
     @PostMapping("/upload")
     public Result upload(@RequestBody UploadRequest uploadRequest) {
         log.info("上传文件");
-        log.info("文件名：{}  扩展名：{}  SHA256：{}  pid：{}", uploadRequest.getFileName(),uploadRequest.getFileExtension(),uploadRequest.getFileSHA256(),uploadRequest.getFile_pid());
-        return fileService.upload(uploadRequest.getFileName(),uploadRequest.getFileExtension(),uploadRequest.getFileSHA256(),uploadRequest.getFile_pid());
+        log.info("文件名：{}  扩展名：{}  SHA256：{}  pid：{}", uploadRequest.getFileName(),uploadRequest.getFileExtension(),uploadRequest.getFileSHA256(),uploadRequest.getFilePid());
+        return fileService.upload(uploadRequest.getFileName(),uploadRequest.getFileExtension(),uploadRequest.getFileSHA256(),uploadRequest.getFilePid());
     }
     
     @PostMapping("/upload/complete")

@@ -4,6 +4,8 @@ import com.panjx.clouddrive.pojo.UserFile;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
+import java.util.List;
+
 @Mapper
 public interface FileMapper {
 
@@ -37,5 +39,8 @@ public interface FileMapper {
 
     // 减少文件引用次数
     void decreaseReferCount(long fileId);
+
+    // 获取指定父目录ID下的所有文件和文件夹
+    List<UserFile> findByFilePid(long filePid);
 
 }

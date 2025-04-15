@@ -6,5 +6,9 @@ import lombok.Data;
 public class DownloadFile {
     private String SHA256;
     private String url;
+    private boolean folderType;
+    private Long size;
     private String filePath;
+    private String fileName;
+    private String fileExtension;
 }

@@ -191,7 +191,23 @@ public class FileServiceImpl implements FileService {
         //检查是否是文件夹
         if (existingFile.getFolderType() == 1) {
             // 文件夹
-            return Result.error("暂不能下载文件夹");
+            log.info("下载文件夹: {}", existingFile.getFileName());
+            List<DownloadFile> downloadFiles = new ArrayList<>();
+            
+            // 获取文件夹路径
+            String folderPath = getFilePath(existingFile.getId());
+            
+            // 递归获取文件夹下所有文件并生成下载链接
+            // 计算总大小
+            long totalSize = getAllFilesInFolder(existingFile.getId(), downloadFiles, folderPath);
+            
+            if (downloadFiles.isEmpty()) {
+                log.info("文件夹为空，无法下载");
+                return Result.error("文件夹为空");
+            }
+            
+            log.info("文件夹 {} 下载准备完成，共计 {} 个文件，总大小 {} 字节", existingFile.getFileName(), downloadFiles.size(), totalSize);
+            return Result.success(DownloadResponse.withUrl(true, totalSize, downloadFiles));
         }else {
             // 文件
             UserFile download = fileMapper.findByFileId(existingFile.getFileId());
@@ -199,7 +215,7 @@ public class FileServiceImpl implements FileService {
             String fileSHA256 = download.getFileSHA256();
             String key;
             // 带有效期
-            long expireInSeconds = 3600*24*14;//1小时，可以自定义链接过期时间
+            long expireInSeconds = 3600*24*14;//两周，可以自定义链接过期时间
             try {
                 // 生成下载链接
                 key =generateDownloadKey(fileSHA256);
@@ -219,12 +235,119 @@ public class FileServiceImpl implements FileService {
             // 获取文件路径并设置
             String filePath = getFilePath(existingFile.getFilePid());
             downloadFile.setFilePath(filePath);
+            downloadFile.setFileName(existingFile.getFileName());
+            downloadFile.setFileExtension(existingFile.getFileExtension());
+            downloadFile.setFolderType(false); // false表示文件
+            // 使用原始字节大小
+            downloadFile.setSize(existingFile.getFileSize());
             
             List<DownloadFile> downloadFiles = new ArrayList<>();
             downloadFiles.add(downloadFile);
-            return Result.success(DownloadResponse.withUrl(downloadFiles));
+            log.info("文件 {} 下载准备完成，大小 {} 字节", existingFile.getFileName(), existingFile.getFileSize());
+            return Result.success(DownloadResponse.withUrl(false, existingFile.getFileSize(), downloadFiles));
         }
     }
+
+    /**
+     * 递归获取文件夹下所有文件并生成下载链接
+     * @param folderId 文件夹ID
+     * @param downloadFiles 下载文件列表
+     * @param parentPath 父路径
+     * @return 文件夹总大小
+     */
+    private long getAllFilesInFolder(Long folderId, List<DownloadFile> downloadFiles, String parentPath) {
+        // 获取文件夹下所有文件和子文件夹
+        log.info("获取文件夹ID {} 下的所有文件和子文件夹", folderId);
+        List<UserFile> files = fileMapper.findByFilePid(folderId);
+        UserFile folderInfo = fileMapper.findUserFileById(folderId);
+        log.info("文件夹信息: {}", folderInfo);
+        
+        if (files == null || files.isEmpty()) {
+            log.info("文件夹ID {} 为空", folderId);
+            
+            // 添加空文件夹到响应列表
+            if (folderInfo != null && folderInfo.getFolderType() == 1) {
+                DownloadFile emptyFolder = new DownloadFile();
+                emptyFolder.setUrl(null);
+                emptyFolder.setFolderType(true);
+                emptyFolder.setSize(null);
+                // 确保路径不包含当前文件夹名称
+                String folderPath = parentPath;
+                // 如果路径不为根目录，则去掉当前文件夹名称
+                if (!"/".equals(folderPath) && folderPath.lastIndexOf("/") > 0) {
+                    folderPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
+                }
+                emptyFolder.setFilePath(folderPath);
+                emptyFolder.setFileName(folderInfo.getFileName());
+                emptyFolder.setFileExtension(null);
+                emptyFolder.setSHA256(null);
+                
+                downloadFiles.add(emptyFolder);
+                log.info("添加空文件夹: {}, 路径: {}", folderInfo.getFileName(), folderPath);
+            }
+            
+            return 0;
+        }
+        
+        log.info("文件夹ID {} 下有 {} 个文件或子文件夹", folderId, files.size());
+        long totalSize = 0;
+        
+        // 先处理所有文件
+        for (UserFile file : files) {
+            // 跳过已删除的文件
+            if (file.getDeleteFlag() == 1) {
+                continue;
+            }
+            
+            if (file.getFolderType() == 0) { // 只处理文件
+                // 文件，生成下载链接
+                UserFile fileInfo = fileMapper.findByFileId(file.getFileId());
+                if (fileInfo != null) {
+                    try {
+                        String key = generateDownloadKey(fileInfo.getFileSHA256());
+                        String url = KodoUtil.getDownloadUrl(key, 3600*24*14);
+                        
+                        DownloadFile downloadFile = new DownloadFile();
+                        downloadFile.setSHA256(fileInfo.getFileSHA256());
+                        downloadFile.setUrl(url);
+                        downloadFile.setFilePath(parentPath);
+                        downloadFile.setFileName(file.getFileName());
+                        downloadFile.setFileExtension(file.getFileExtension());
+                        downloadFile.setFolderType(false); // false表示文件
+                        // 使用原始字节大小
+                        downloadFile.setSize(file.getFileSize());
+                        
+                        downloadFiles.add(downloadFile);
+                        
+                        // 累加文件大小
+                        totalSize += file.getFileSize();
+                        log.info("处理文件: {}, 大小: {}, 路径: {}", file.getFileName(), file.getFileSize(), parentPath);
+                    } catch (Exception e) {
+                        log.error("获取文件下载链接失败: {}", e.getMessage());
+                    }
+                }
+            }
+        }
+        
+        // 再处理所有子文件夹
+        for (UserFile file : files) {
+            if (file.getDeleteFlag() == 1) {
+                continue;
+            }
+            
+            if (file.getFolderType() == 1) { // 处理文件夹
+                // 子文件夹，递归处理
+                String newPath = parentPath + "/" + file.getFileName();
+                log.info("处理子文件夹: {}, 路径: {}", file.getFileName(), newPath);
+                
+                // 递归处理子文件夹
+                totalSize += getAllFilesInFolder(file.getId(), downloadFiles, newPath);
+            }
+        }
+        
+        return totalSize;
+    }
+    
     /**
      * 根据文件SHA256哈希值生成多级目录下载路径
      * 格式：files/前8字符/次8字符/再次8字符/再次8字符/完整SHA256值

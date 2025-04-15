@@ -30,11 +30,10 @@ public class FileController {
         return fileService.uploadComplete(userFile);
     }
 
-    @GetMapping("/download")
+    @PostMapping("/download")
     public Result download(@RequestBody UserFile userFile) {
-        System.out.println(userFile);
         log.info("下载文件");
-        log.info("文件ID{}", userFile.getId());
+        log.info("文件ID：{}", userFile.getId());
         return fileService.download(userFile);
     }
 }

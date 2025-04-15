@@ -69,4 +69,14 @@
         update file set refer_count = refer_count - 1 where file_id = #{fileId}
     </update>
 
+    <select id="findByFilePid" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select
+            *
+        from
+            user_file uf
+        LEFT JOIN file f ON uf.file_id = f.file_id
+        where
+            file_pid = #{filePid}
+    </select>
+
 </mapper>

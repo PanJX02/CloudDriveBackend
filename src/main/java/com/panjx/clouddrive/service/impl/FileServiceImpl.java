@@ -255,8 +255,8 @@ public class FileServiceImpl implements FileService {
             log.info("文件 {} 下载准备完成，大小 {} 字节", existingFile.getFileName(), existingFile.getFileSize());
             
             // 检查文件路径是否为空，是则改为"/"
-            if (downloadFiles.size() > 0 && (downloadFiles.get(0).getFilePath() == null || "".equals(downloadFiles.get(0).getFilePath()))) {
-                downloadFiles.get(0).setFilePath("/");
+            if (downloadFiles.getFirst().getFilePath() == null || "".equals(downloadFiles.getFirst().getFilePath())) {
+                downloadFiles.getFirst().setFilePath("/");
                 log.info("修正根目录文件路径为: /");
             }
             

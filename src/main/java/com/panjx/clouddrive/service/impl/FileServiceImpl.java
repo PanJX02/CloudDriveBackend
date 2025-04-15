@@ -207,6 +207,15 @@ public class FileServiceImpl implements FileService {
             }
             
             log.info("文件夹 {} 下载准备完成，共计 {} 个文件，总大小 {} 字节", existingFile.getFileName(), downloadFiles.size(), totalSize);
+            
+            // 检查所有文件的路径，如果有空路径则改为"/"
+            for (DownloadFile df : downloadFiles) {
+                if (df.getFilePath() == null || "".equals(df.getFilePath())) {
+                    df.setFilePath("/");
+                    log.info("修正文件 {} 的路径为: /", df.getFileName());
+                }
+            }
+            
             return Result.success(DownloadResponse.withUrl(true, totalSize, downloadFiles));
         }else {
             // 文件
@@ -239,12 +248,19 @@ public class FileServiceImpl implements FileService {
             downloadFile.setFileExtension(existingFile.getFileExtension());
             downloadFile.setFolderType(false); // false表示文件
             // 使用原始字节大小
-            downloadFile.setSize(existingFile.getFileSize());
+            downloadFile.setSize(download.getFileSize());
             
             List<DownloadFile> downloadFiles = new ArrayList<>();
             downloadFiles.add(downloadFile);
             log.info("文件 {} 下载准备完成，大小 {} 字节", existingFile.getFileName(), existingFile.getFileSize());
-            return Result.success(DownloadResponse.withUrl(false, existingFile.getFileSize(), downloadFiles));
+            
+            // 检查文件路径是否为空，是则改为"/"
+            if (downloadFiles.size() > 0 && (downloadFiles.get(0).getFilePath() == null || "".equals(downloadFiles.get(0).getFilePath()))) {
+                downloadFiles.get(0).setFilePath("/");
+                log.info("修正根目录文件路径为: /");
+            }
+            
+            return Result.success(DownloadResponse.withUrl(false, download.getFileSize(), downloadFiles));
         }
     }
 
@@ -271,19 +287,26 @@ public class FileServiceImpl implements FileService {
                 emptyFolder.setUrl(null);
                 emptyFolder.setFolderType(true);
                 emptyFolder.setSize(null);
-                // 确保路径不包含当前文件夹名称
-                String folderPath = parentPath;
-                // 如果路径不为根目录，则去掉当前文件夹名称
-                if (!"/".equals(folderPath) && folderPath.lastIndexOf("/") > 0) {
-                    folderPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
+                
+                // 对于根目录下的文件夹，设置路径为"/"
+                if (folderInfo.getFilePid() == 0) {
+                    emptyFolder.setFilePath("/");
+                } else {
+                    // 确保路径不包含当前文件夹名称
+                    String folderPath = parentPath;
+                    // 如果路径不为根目录，则去掉当前文件夹名称
+                    if (!"/".equals(folderPath) && folderPath.lastIndexOf("/") > 0) {
+                        folderPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
+                    }
+                    emptyFolder.setFilePath(folderPath);
                 }
-                emptyFolder.setFilePath(folderPath);
+                
                 emptyFolder.setFileName(folderInfo.getFileName());
                 emptyFolder.setFileExtension(null);
                 emptyFolder.setSHA256(null);
                 
                 downloadFiles.add(emptyFolder);
-                log.info("添加空文件夹: {}, 路径: {}", folderInfo.getFileName(), folderPath);
+                log.info("添加空文件夹: {}, 路径: {}", folderInfo.getFileName(), emptyFolder.getFilePath());
             }
             
             return 0;
@@ -311,6 +334,11 @@ public class FileServiceImpl implements FileService {
                         downloadFile.setSHA256(fileInfo.getFileSHA256());
                         downloadFile.setUrl(url);
                         downloadFile.setFilePath(parentPath);
+                        // 检查路径是否为空
+                        if (downloadFile.getFilePath() == null || "".equals(downloadFile.getFilePath())) {
+                            downloadFile.setFilePath("/");
+                            log.info("修正文件 {} 的路径为: /", file.getFileName());
+                        }
                         downloadFile.setFileName(file.getFileName());
                         downloadFile.setFileExtension(file.getFileExtension());
                         downloadFile.setFolderType(false); // false表示文件

@@ -1,11 +1,9 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.file;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
-import org.springframework.stereotype.Service;
 
-@Service
-public interface FileService {
+public interface FileUploadService {
 
     /**
      * 处理文件上传的操作
@@ -16,14 +14,9 @@ public interface FileService {
      * @return 上传结果
      */
     Result upload(String fileName,String fileExtension, String fileSHA256, Long file_pid);
-    
+
     /**
      * 处理文件上传完成后的操作
      */
     Result uploadComplete(UserFile userFile);
-
-    /**
-     * 处理文件下载的操作
-     */
-    Result download(UserFile userFile);
 }

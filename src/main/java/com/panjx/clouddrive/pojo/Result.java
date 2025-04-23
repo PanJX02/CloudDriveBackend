@@ -21,6 +21,15 @@ public class Result {
         return result;
     }
 
+    //成功返回结果(有参)
+    public static Result success(String message) {
+        Result result = new Result();
+        result.code = 1;
+        result.message = message;
+        result.data = null;
+        return result;
+    }
+
     //成功返回结果
     public static Result success(Object object) {
         Result result = new Result();
@@ -41,9 +50,9 @@ public class Result {
 
 
     //失败返回结果
-    public static Result error(String msg) {
+    public static Result error(String message) {
         Result result = new Result();
-        result.message = msg;
+        result.message = message;
         result.code = 0;
         return result;
     }

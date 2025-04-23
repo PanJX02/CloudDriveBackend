@@ -79,4 +79,58 @@
             file_pid = #{filePid}
     </select>
 
+    <update id="moveFile">
+        update user_file 
+        set file_pid = #{targetFolderId}, 
+            last_update_time = unix_timestamp(now()) * 1000
+        where id = #{fileId}
+    </update>
+    
+    <select id="checkIsChildFolder" resultType="com.panjx.clouddrive.pojo.UserFile">
+        WITH RECURSIVE folder_path (id, file_name, file_pid) AS (
+            SELECT id, file_name, file_pid
+            FROM user_file
+            WHERE id = #{targetFolderId} AND folder_type = 1
+            UNION ALL
+            SELECT uf.id, uf.file_name, uf.file_pid
+            FROM user_file uf
+            JOIN folder_path fp ON uf.file_pid = fp.id
+            WHERE uf.folder_type = 1
+        )
+        SELECT * FROM folder_path WHERE id = #{folderId}
+    </select>
+    
+    <update id="updateFavoriteFlag">
+        update user_file 
+        set favorite_flag = #{favoriteFlag}, 
+            last_update_time = unix_timestamp(now()) * 1000
+        where id = #{id}
+    </update>
+    
+    <select id="getFavoriteFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select
+            uf.*,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.file_category as fileCategory,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus,
+            f.create_time as fileCreateTime,
+            f.last_refer_time as lastReferTime
+        from
+            user_file uf
+        LEFT JOIN file f ON uf.file_id = f.file_id
+        where
+            uf.user_id = #{userId} AND
+            uf.favorite_flag = 1 AND
+            uf.delete_flag = 0
+        order by 
+            uf.last_update_time desc
+    </select>
+
 </mapper>

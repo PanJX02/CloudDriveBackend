@@ -42,5 +42,17 @@ public interface FileMapper {
 
     // 获取指定父目录ID下的所有文件和文件夹
     List<UserFile> findByFilePid(long filePid);
+    
+    // 移动文件
+    void moveFile(long fileId, long targetFolderId);
+    
+    // 检查是否是目标文件夹的子文件夹
+    List<UserFile> checkIsChildFolder(long folderId, long targetFolderId);
+
+    // 更新文件收藏状态
+    void updateFavoriteFlag(long id, int favoriteFlag);
+    
+    // 获取用户收藏的文件列表
+    List<UserFile> getFavoriteFiles(long userId);
 
 }

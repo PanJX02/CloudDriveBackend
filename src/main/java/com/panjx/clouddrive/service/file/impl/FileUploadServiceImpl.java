@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.file.impl;
 
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.mapper.StorageMapper;
@@ -7,7 +7,7 @@ import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.Storage;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.response.UploadResponse;
-import com.panjx.clouddrive.service.UploadService;
+import com.panjx.clouddrive.service.file.FileUploadService;
 import com.panjx.clouddrive.utils.KodoUtil;
 import com.panjx.clouddrive.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class UploadServiceImpl implements UploadService {
+public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     private FileMapper fileMapper;
 

@@ -45,5 +45,26 @@
         uf.folder_type DESC,  <!-- 文件夹优先 -->
         uf.file_name ASC      <!-- 新增文件名升序 -->
     </select>
+    
+    <!-- 创建文件夹 -->
+    <insert id="createFolder" parameterType="com.panjx.clouddrive.pojo.UserFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_file (
+            user_id, 
+            file_name, 
+            file_pid, 
+            folder_type, 
+            delete_flag, 
+            create_time, 
+            last_update_time
+        ) VALUES (
+            #{userId}, 
+            #{fileName}, 
+            #{filePid}, 
+            #{folderType}, 
+            #{deleteFlag}, 
+            #{createTime}, 
+            #{lastUpdateTime}
+        )
+    </insert>
 
 </mapper>

@@ -1,13 +1,11 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.file.impl;
 
 import com.panjx.clouddrive.mapper.FileMapper;
-import com.panjx.clouddrive.mapper.StorageMapper;
-import com.panjx.clouddrive.mapper.UserMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.response.DownloadFile;
 import com.panjx.clouddrive.pojo.response.DownloadResponse;
-import com.panjx.clouddrive.service.DownloadService;
+import com.panjx.clouddrive.service.file.FileDownloadService;
 import com.panjx.clouddrive.utils.KodoUtil;
 import com.qiniu.common.QiniuException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class DownloadServiceImpl implements DownloadService {
+public class FileDownloadServiceImpl implements FileDownloadService {
 
     @Autowired
     private FileMapper fileMapper;

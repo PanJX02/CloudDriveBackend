@@ -9,4 +9,6 @@ import java.util.List;
 public interface FolderMapper {
 
     List<UserFile> getFileList(long userId, long filePid);
+    
+    int createFolder(UserFile userFile);
 }

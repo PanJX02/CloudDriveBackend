@@ -1,9 +1,9 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.file;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
 
-public interface DownloadService {
+public interface FileDownloadService {
 
     /**
      * 处理文件下载的操作

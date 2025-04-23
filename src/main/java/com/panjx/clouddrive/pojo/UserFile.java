@@ -58,6 +58,8 @@ public class UserFile {
      */
     private Long recoveryTime;
 
+    private Integer favoriteFlag;
+
     /**
      * 关联创建时间
      */

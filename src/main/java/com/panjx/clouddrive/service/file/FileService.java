@@ -58,4 +58,11 @@ public interface FileService {
      * @return 收藏的文件列表
      */
     Result getFavoriteFiles();
+    
+    /**
+     * 获取文件或文件夹的详细信息
+     * @param fileId 文件/文件夹ID
+     * @return 详细信息结果
+     */
+    Result getFileDetail(Long fileId);
 }

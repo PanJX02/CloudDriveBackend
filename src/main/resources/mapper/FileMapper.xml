@@ -22,7 +22,7 @@
         select * from user_file where id = #{id}
     </select>
 
-    <insert id="addUserFile" parameterType="com.panjx.clouddrive.pojo.UserFile">
+    <insert id="addUserFile" parameterType="com.panjx.clouddrive.pojo.UserFile" useGeneratedKeys="true" keyProperty="id">
         insert into user_file(user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag, recovery_time, create_time, last_update_time)
         values (#{userId}, #{fileId}, #{fileName}, #{fileExtension}, #{filePid}, #{folderType}, #{deleteFlag}, #{recoveryTime}, #{createTime}, #{lastUpdateTime})
     </insert>

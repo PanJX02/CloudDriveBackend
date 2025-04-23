@@ -12,7 +12,8 @@ public interface FileMapper {
     // 通过文件sha256查找文件
     UserFile findByFileSHA256(String fileSHA256);
 
-    // 添加文件
+    // 添加文件，并返回生成的ID
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void addUserFile(UserFile userFile);
     
     // 添加文件记录并返回生成的ID

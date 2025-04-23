@@ -109,6 +109,55 @@ public class FileCopyServiceImpl implements FileCopyService {
     }
 
     /**
+     * 复制文件夹及其内容
+     * @param sourceFolder 源文件夹
+     * @param targetFolderId 目标文件夹ID
+     * @param needRename 是否需要重命名（同文件夹复制时）
+     * @return 新文件夹的ID
+     */
+    private Long copyFolder(UserFile sourceFolder, Long targetFolderId, boolean needRename) {
+        // 1. 创建新文件夹
+        UserFile newFolder = new UserFile();
+        newFolder.setUserId(sourceFolder.getUserId());
+        newFolder.setFileId(null); // 文件夹没有关联的物理文件
+        newFolder.setFileName(needRename ? sourceFolder.getFileName() + "副本" : sourceFolder.getFileName());
+        newFolder.setFileExtension(null);
+        newFolder.setFilePid(targetFolderId);
+        newFolder.setFolderType(1); // 1表示文件夹
+        newFolder.setDeleteFlag(0);
+        newFolder.setCreateTime(System.currentTimeMillis());
+        newFolder.setLastUpdateTime(System.currentTimeMillis());
+
+        // 添加新文件夹记录（此处会自动设置newFolder的id属性）
+        fileMapper.addUserFile(newFolder);
+        Long newFolderId = newFolder.getId();
+        log.info("创建新文件夹，ID: {}, 名称: {}, 父文件夹ID: {}", newFolderId, newFolder.getFileName(), targetFolderId);
+
+        // 2. 获取源文件夹下所有文件和子文件夹
+        List<UserFile> children = fileMapper.findByFilePid(sourceFolder.getId());
+        if (children != null && !children.isEmpty()) {
+            log.info("文件夹 {} 下有 {} 个子项需要复制", sourceFolder.getFileName(), children.size());
+            
+            // 3. 递归复制所有子文件和文件夹
+            for (UserFile child : children) {
+                if (child.getFolderType() == 1) {
+                    // 递归复制子文件夹，注意使用newFolderId作为目标父ID
+                    Long newChildFolderId = copyFolder(child, newFolderId, false);
+                    log.info("复制子文件夹 {} 到新文件夹 {}, 新ID: {}", child.getFileName(), newFolderId, newChildFolderId);
+                } else {
+                    // 复制子文件，使用newFolderId作为目标父ID
+                    Long newFileId = copySimpleFile(child, newFolderId, false);
+                    log.info("复制文件 {} 到新文件夹 {}, 新ID: {}", child.getFileName(), newFolderId, newFileId);
+                }
+            }
+        } else {
+            log.info("文件夹 {} 为空，无需复制子项", sourceFolder.getFileName());
+        }
+
+        return newFolderId;
+    }
+
+    /**
      * 复制单个文件
      * @param sourceFile 源文件
      * @param targetFolderId 目标文件夹ID
@@ -140,7 +189,7 @@ public class FileCopyServiceImpl implements FileCopyService {
         // 增加文件引用计数
         fileMapper.increaseReferCount(sourceFile.getFileId(), System.currentTimeMillis());
 
-        // 添加新的文件记录
+        // 添加新的文件记录，自动设置newUserFile的id属性
         fileMapper.addUserFile(newUserFile);
         
         // 更新用户使用空间
@@ -150,47 +199,5 @@ public class FileCopyServiceImpl implements FileCopyService {
         }
 
         return newUserFile.getId();
-    }
-
-    /**
-     * 复制文件夹及其内容
-     * @param sourceFolder 源文件夹
-     * @param targetFolderId 目标文件夹ID
-     * @param needRename 是否需要重命名（同文件夹复制时）
-     * @return 新文件夹的ID
-     */
-    private Long copyFolder(UserFile sourceFolder, Long targetFolderId, boolean needRename) {
-        // 1. 创建新文件夹
-        UserFile newFolder = new UserFile();
-        newFolder.setUserId(sourceFolder.getUserId());
-        newFolder.setFileId(null); // 文件夹没有关联的物理文件
-        newFolder.setFileName(needRename ? sourceFolder.getFileName() + "副本" : sourceFolder.getFileName());
-        newFolder.setFileExtension(null);
-        newFolder.setFilePid(targetFolderId);
-        newFolder.setFolderType(1); // 1表示文件夹
-        newFolder.setDeleteFlag(0);
-        newFolder.setCreateTime(System.currentTimeMillis());
-        newFolder.setLastUpdateTime(System.currentTimeMillis());
-
-        // 添加新文件夹记录
-        fileMapper.addUserFile(newFolder);
-        Long newFolderId = newFolder.getId();
-
-        // 2. 获取源文件夹下所有文件和子文件夹
-        List<UserFile> children = fileMapper.findByFilePid(sourceFolder.getId());
-        if (children != null && !children.isEmpty()) {
-            // 3. 递归复制所有子文件和文件夹
-            for (UserFile child : children) {
-                if (child.getFolderType() == 1) {
-                    // 递归复制子文件夹
-                    copyFolder(child, newFolderId, false);
-                } else {
-                    // 复制子文件
-                    copySimpleFile(child, newFolderId, false);
-                }
-            }
-        }
-
-        return newFolderId;
     }
 } 

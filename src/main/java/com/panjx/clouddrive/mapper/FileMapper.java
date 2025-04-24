@@ -55,5 +55,10 @@ public interface FileMapper {
     
     // 获取用户收藏的文件列表
     List<UserFile> getFavoriteFiles(long userId);
-
+    
+    // 标记文件为待删除状态
+    void markFileAsToBeDeleted(long fileId);
+    
+    // 获取指定文件夹下所有子文件和子文件夹
+    List<UserFile> findAllByFilePidRecursive(long folderId);
 }

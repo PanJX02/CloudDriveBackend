@@ -58,7 +58,7 @@
     </insert>
 
     <delete id="deleteUserFile">
-
+        delete from user_file where id = #{id}
     </delete>
     
     <update id="increaseReferCount">
@@ -67,6 +67,12 @@
     
     <update id="decreaseReferCount">
         update file set refer_count = refer_count - 1 where file_id = #{fileId}
+    </update>
+    
+    <update id="markFileAsToBeDeleted">
+        update file 
+        set status = 2 
+        where file_id = #{fileId} and refer_count = 0
     </update>
 
     <select id="findByFilePid" resultType="com.panjx.clouddrive.pojo.UserFile">
@@ -77,6 +83,34 @@
         LEFT JOIN file f ON uf.file_id = f.file_id
         where
             file_pid = #{filePid}
+    </select>
+    
+    <select id="findAllByFilePidRecursive" resultType="com.panjx.clouddrive.pojo.UserFile">
+        WITH RECURSIVE folder_contents (id, user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag) AS (
+            SELECT id, user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag
+            FROM user_file
+            WHERE file_pid = #{folderId}
+            UNION ALL
+            SELECT uf.id, uf.user_id, uf.file_id, uf.file_name, uf.file_extension, uf.file_pid, uf.folder_type, uf.delete_flag
+            FROM user_file uf
+            JOIN folder_contents fc ON uf.file_pid = fc.id
+            WHERE fc.folder_type = 1
+        )
+        SELECT fc.*, 
+               f.file_md5 as fileMD5,
+               f.file_sha1 as fileSHA1,
+               f.file_sha256 as fileSHA256,
+               f.file_category as fileCategory,
+               f.storage_id as storageId,
+               f.file_size as fileSize,
+               f.file_cover as fileCover,
+               f.refer_count as referCount,
+               f.status,
+               f.transcode_status as transcodeStatus,
+               f.create_time as fileCreateTime,
+               f.last_refer_time as lastReferTime 
+        FROM folder_contents fc
+        LEFT JOIN file f ON fc.file_id = f.file_id
     </select>
 
     <update id="moveFile">

@@ -86,4 +86,16 @@ public class FileController {
         log.info("文件ID：{}", request.getId());
         return fileService.getFileDetail(request.getId());
     }
+    
+    /**
+     * 删除文件或文件夹
+     * @param fileIdRequest 请求对象，包含文件/文件夹ID
+     * @return 删除结果
+     */
+    @PostMapping("/delete")
+    public Result deleteFile(@RequestBody FileIdRequest fileIdRequest) {
+        log.info("删除文件/文件夹");
+        log.info("文件ID：{}", fileIdRequest.getId());
+        return fileService.deleteFile(fileIdRequest.getId());
+    }
 }

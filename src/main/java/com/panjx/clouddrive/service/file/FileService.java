@@ -65,4 +65,11 @@ public interface FileService {
      * @return 详细信息结果
      */
     Result getFileDetail(Long fileId);
+    
+    /**
+     * 删除文件或文件夹
+     * @param fileId 文件/文件夹ID
+     * @return 操作结果
+     */
+    Result deleteFile(Long fileId);
 }

@@ -75,6 +75,13 @@
         where file_id = #{fileId} and refer_count = 0
     </update>
 
+    <update id="markFileAsNotToBeDeleted">
+        update file
+        set status = 1
+        where file_id = #{fileId} and refer_count != 0
+    </update>
+
+
     <select id="findByFilePid" resultType="com.panjx.clouddrive.pojo.UserFile">
         select
             *
@@ -140,7 +147,7 @@
             last_update_time = unix_timestamp(now()) * 1000
         where id = #{id}
     </update>
-    
+
     <select id="getFavoriteFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
         select
             uf.*,

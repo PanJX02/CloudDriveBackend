@@ -58,6 +58,9 @@ public interface FileMapper {
     
     // 标记文件为待删除状态
     void markFileAsToBeDeleted(long fileId);
+
+    //标记文件为未删除状态
+    void markFileAsNotToBeDeleted(long fileId);
     
     // 获取指定文件夹下所有子文件和子文件夹
     List<UserFile> findAllByFilePidRecursive(long folderId);

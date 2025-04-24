@@ -67,6 +67,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             // 添加到用户文件表
             fileMapper.addUserFile(userFile);
 
+            // 更新状态
+            fileMapper.markFileAsNotToBeDeleted(userFile.getFileId());
+
             //更新用户使用空间
             userMapper.updateUserSpace(userId, existingFile.getFileSize());
 
@@ -120,6 +123,10 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         // 更新用户使用空间
         userMapper.updateUserSpace(userId, userFile.getFileSize());
+
+        // 更新引用计数
+        fileMapper.increaseReferCount(userFile.getFileId(), currentTime);
+
 
         log.info("文件上传完成，已保存记录。文件ID: {}", userFile.getFileId());
 

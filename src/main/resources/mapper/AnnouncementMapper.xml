@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.panjx.clouddrive.mapper.AnnouncementMapper">
+    
+    <!-- 查询所有有效的公告 -->
+    <select id="findAllValid" resultType="com.panjx.clouddrive.pojo.Announcement">
+        SELECT * FROM announcements 
+        WHERE status = 1 
+        AND (expiry_time IS NULL OR expiry_time > #{currentTime})
+        ORDER BY importance DESC, publish_time DESC
+    </select>
+    
+    <!-- 根据ID查询公告 -->
+    <select id="findById" resultType="com.panjx.clouddrive.pojo.Announcement">
+        SELECT * FROM announcements WHERE id = #{id}
+    </select>
+    
+    <!-- 增加公告查看次数 -->
+    <update id="increaseViewCount">
+        UPDATE announcements SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+    
+    <!-- 根据重要性获取公告 -->
+    <select id="findByImportance" resultType="com.panjx.clouddrive.pojo.Announcement">
+        SELECT * FROM announcements 
+        WHERE importance = #{importance} 
+        AND status = 1
+        AND (expiry_time IS NULL OR expiry_time > #{currentTime})
+        ORDER BY publish_time DESC
+    </select>
+    
+    <!-- 获取最新发布的N条公告 -->
+    <select id="findLatest" resultType="com.panjx.clouddrive.pojo.Announcement">
+        SELECT * FROM announcements 
+        WHERE status = 1
+        AND (expiry_time IS NULL OR expiry_time > #{currentTime})
+        ORDER BY publish_time DESC
+        LIMIT #{limit}
+    </select>
+</mapper> 

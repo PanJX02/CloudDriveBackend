@@ -4,6 +4,7 @@ import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.pojo.request.FileDetailRequest;
 import com.panjx.clouddrive.pojo.request.FileIdRequest;
+import com.panjx.clouddrive.pojo.request.FileSearchRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;
 import com.panjx.clouddrive.pojo.request.UploadRequest;
 import com.panjx.clouddrive.pojo.UserFile;
@@ -80,7 +81,7 @@ public class FileController {
      * @param request 请求对象，包含文件ID
      * @return 详细信息结果
      */
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result getFileDetail(@RequestBody FileDetailRequest request) {
         log.info("获取文件/文件夹详情");
         log.info("文件ID：{}", request.getId());
@@ -97,5 +98,19 @@ public class FileController {
         log.info("删除文件/文件夹");
         log.info("文件ID：{}", fileIdRequest.getId());
         return fileService.deleteFile(fileIdRequest.getId());
+    }
+    
+    /**
+     * 搜索文件
+     * @param searchRequest 搜索请求参数
+     * @return 搜索结果
+     */
+    @PostMapping("/search")
+    public Result searchFiles(@RequestBody FileSearchRequest searchRequest) {
+        log.info("搜索文件");
+        log.info("搜索关键词：{} 文件夹ID：{}", 
+                searchRequest.getKeyword(), 
+                searchRequest.getFolderId());
+        return fileService.searchFiles(searchRequest);
     }
 }

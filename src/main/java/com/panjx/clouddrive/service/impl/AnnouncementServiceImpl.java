@@ -21,6 +21,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             // 获取当前时间戳
             long currentTime = System.currentTimeMillis();
             List<Announcement> announcements = announcementMapper.findAllValid();
+            
+            // 增加每个公告的查看次数
+            for (Announcement announcement : announcements) {
+                announcement.setViewCount(announcement.getViewCount() + 1);
+                announcement.setCreatedAt(null);
+                announcement.setUpdatedAt(null);
+                announcementMapper.increaseViewCount(announcement.getId());
+            }
+            
             return Result.success(announcements);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,6 +70,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             long currentTime = System.currentTimeMillis();
             List<Announcement> announcements = announcementMapper.findByImportance(importance);
             
+            // 增加每个公告的查看次数
+            for (Announcement announcement : announcements) {
+                announcement.setViewCount(announcement.getViewCount() + 1);
+                announcement.setCreatedAt(null);
+                announcement.setUpdatedAt(null);
+                announcementMapper.increaseViewCount(announcement.getId());
+            }
+            
             return Result.success(announcements);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +95,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             // 获取当前时间戳
             long currentTime = System.currentTimeMillis();
             List<Announcement> announcements = announcementMapper.findLatest(limit);
+            
+            // 增加每个公告的查看次数
+            for (Announcement announcement : announcements) {
+                announcement.setViewCount(announcement.getViewCount() + 1);
+                announcement.setCreatedAt(null);
+                announcement.setUpdatedAt(null);
+                announcementMapper.increaseViewCount(announcement.getId());
+            }
             
             return Result.success(announcements);
         } catch (Exception e) {

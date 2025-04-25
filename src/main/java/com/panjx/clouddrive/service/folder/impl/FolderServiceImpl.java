@@ -6,7 +6,7 @@ import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.service.folder.FolderService;
-import com.panjx.clouddrive.utils.SecurityUtils;
+import com.panjx.clouddrive.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class FolderServiceImpl implements FolderService {
     @Override
     public FileList getFiles(Long folderId) {
         // 获取当前用户信息
-        Long userId = SecurityUtils.getCurrentUserId();
+        Long userId = SecurityUtil.getCurrentUserId();
         if (userId == null) {
             return null;
         }

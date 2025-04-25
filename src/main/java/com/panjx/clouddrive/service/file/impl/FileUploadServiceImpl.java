@@ -9,7 +9,7 @@ import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.response.UploadResponse;
 import com.panjx.clouddrive.service.file.FileUploadService;
 import com.panjx.clouddrive.utils.KodoUtil;
-import com.panjx.clouddrive.utils.SecurityUtils;
+import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         UserFile existingFile = fileMapper.findByFileSHA256(fileSHA256);
         log.info("查询结果：{}", existingFile);
         // 当前用户ID
-        Long userId = SecurityUtils.getCurrentUserId();
+        Long userId = SecurityUtil.getCurrentUserId();
 
         if (existingFile != null) {
             log.info("查询到文件ID：{}", existingFile.getId());
@@ -94,7 +94,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         log.info("处理上传完成: {}", userFile.getFileName());
 
         // 获取当前用户ID并设置
-        Long userId = SecurityUtils.getCurrentUserId();
+        Long userId = SecurityUtil.getCurrentUserId();
         userFile.setUserId(userId);
 
         // 设置文件相关属性

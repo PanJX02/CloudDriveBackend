@@ -3,6 +3,7 @@ package com.panjx.clouddrive.mapper;
 import com.panjx.clouddrive.pojo.UserFile;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -64,4 +65,9 @@ public interface FileMapper {
     
     // 获取指定文件夹下所有子文件和子文件夹
     List<UserFile> findAllByFilePidRecursive(long folderId);
+    
+    // 根据关键词搜索文件和扩展名
+    List<UserFile> searchFiles(@Param("userId") long userId, 
+                              @Param("keyword") String keyword, 
+                              @Param("folderId") Long folderId);
 }

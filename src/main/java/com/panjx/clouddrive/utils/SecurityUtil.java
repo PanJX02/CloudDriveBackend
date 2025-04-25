@@ -3,7 +3,7 @@ package com.panjx.clouddrive.utils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class SecurityUtils {
+public class SecurityUtil {
 
     /**
      * 获取当前登录用户的用户名

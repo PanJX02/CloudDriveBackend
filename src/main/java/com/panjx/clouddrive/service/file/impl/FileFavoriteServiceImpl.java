@@ -4,7 +4,7 @@ import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.service.file.FileFavoriteService;
-import com.panjx.clouddrive.utils.SecurityUtils;
+import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class FileFavoriteServiceImpl implements FileFavoriteService {
     @Override
     public Result favoriteFile(Long userFileId) {
         try {
-            Long userId = SecurityUtils.getCurrentUserId();
+            Long userId = SecurityUtil.getCurrentUserId();
             UserFile userFile = fileMapper.findUserFileById(userFileId);
             
             if (userFile == null) {
@@ -53,7 +53,7 @@ public class FileFavoriteServiceImpl implements FileFavoriteService {
     @Override
     public Result unfavoriteFile(Long userFileId) {
         try {
-            Long userId = SecurityUtils.getCurrentUserId();
+            Long userId = SecurityUtil.getCurrentUserId();
             UserFile userFile = fileMapper.findUserFileById(userFileId);
             
             if (userFile == null) {
@@ -79,7 +79,7 @@ public class FileFavoriteServiceImpl implements FileFavoriteService {
     @Override
     public Result getFavoriteFiles() {
         try {
-            Long userId = SecurityUtils.getCurrentUserId();
+            Long userId = SecurityUtil.getCurrentUserId();
             List<UserFile> favoriteFiles = fileMapper.getFavoriteFiles(userId);
             return Result.success(favoriteFiles);
         } catch (Exception e) {

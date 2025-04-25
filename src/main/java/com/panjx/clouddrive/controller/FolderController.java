@@ -2,10 +2,9 @@ package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.CreateFolderRequest;
 import com.panjx.clouddrive.service.folder.FolderService;
-import com.panjx.clouddrive.utils.SecurityUtils;
+import com.panjx.clouddrive.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +37,7 @@ public class FolderController {
         }
         
         // 获取当前用户ID
-        Long userId = SecurityUtils.getCurrentUserId();
+        Long userId = SecurityUtil.getCurrentUserId();
         if (userId == null) {
             return Result.error("用户未登录");
         }

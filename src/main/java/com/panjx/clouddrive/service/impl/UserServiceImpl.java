@@ -22,6 +22,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.findByUsername(username);
     }
 
+    // 根据用户ID查询用户
+    @Override
+    public User findById(Long userId) {
+        return userMapper.findById(userId);
+    }
+
     // 注册
     @Override
     public TokenResponse register(UserDTO userDTO) {

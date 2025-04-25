@@ -38,7 +38,15 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    private Result findById(@PathVariable("userId") Long userId){
-        return Result.success();
+    public Result findById(@PathVariable("userId") Long userId){
+        // 根据ID查询用户
+        User user = userService.findById(userId);
+        if (user != null) {
+            // 敏感信息处理，不返回密码
+            user.setPassword(null);
+            return Result.success(user);
+        } else {
+            return Result.error("用户不存在");
+        }
     }
 }

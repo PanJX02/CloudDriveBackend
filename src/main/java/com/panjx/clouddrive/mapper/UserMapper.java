@@ -8,6 +8,9 @@ public interface UserMapper {
     // 根据用户名查询用户
     User findByUsername(String username);
 
+    // 根据用户ID查询用户
+    User findById(Long userId);
+
     // 注册
     void add(User user);
 

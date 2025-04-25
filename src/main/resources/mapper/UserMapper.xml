@@ -13,6 +13,16 @@
             user_name = #{username}
     </select>
 
+    <!-- 根据用户ID查询用户 -->
+    <select id="findById" resultType="com.panjx.clouddrive.pojo.User">
+        SELECT
+            *
+        FROM
+            user
+        WHERE
+            user_id = #{userId}
+    </select>
+
     <!-- 注册新用户 -->
     <insert id="add" parameterType="com.panjx.clouddrive.pojo.User">
         INSERT INTO user (user_name, nick_name, password, join_time, identity)

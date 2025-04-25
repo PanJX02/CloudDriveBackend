@@ -12,5 +12,7 @@ public interface UserService {
 
     User findByUsername(String username);
 
+    User findById(Long userId);
+
     TokenResponse register(UserDTO userDTO);
 }

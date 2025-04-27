@@ -4,6 +4,7 @@ import com.panjx.clouddrive.pojo.UserFile;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -26,6 +27,10 @@ public interface FileMapper {
 
     //通过UserFileID查找文件
     UserFile findByUserFileId(long d);
+    
+    // 根据ID查找用户文件
+    @Select("SELECT * FROM user_file WHERE id = #{id}")
+    UserFile findById(Long id);
 
     // 通过PID查找文件
     UserFile findByPid(long filePid);

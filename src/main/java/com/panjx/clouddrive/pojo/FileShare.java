@@ -10,7 +10,7 @@ public class FileShare {
     /**
      * 分享ID
      */
-    private String shareId;
+    private Long shareId;
     
     /**
      * 发起分享的用户ID

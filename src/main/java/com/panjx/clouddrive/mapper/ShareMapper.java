@@ -15,8 +15,9 @@ public interface ShareMapper {
     /**
      * 添加分享记录
      */
-    @Insert("INSERT INTO file_share(share_id, user_id, valid_type, expire_time, share_time, code, show_count, is_expired) " +
-            "VALUES(#{shareId}, #{userId}, #{validType}, #{expireTime}, #{shareTime}, #{code}, 0, 0)")
+    @Insert("INSERT INTO file_share(user_id, valid_type, expire_time, share_time, code, show_count, is_expired) " +
+            "VALUES(#{userId}, #{validType}, #{expireTime}, #{shareTime}, #{code}, 0, 0)")
+    @Options(useGeneratedKeys = true, keyProperty = "shareId")
     void addShare(FileShare fileShare);
     
     /**
@@ -29,11 +30,11 @@ public interface ShareMapper {
      * 根据分享ID查询分享信息
      */
     @Select("SELECT * FROM file_share WHERE share_id = #{shareId}")
-    FileShare findShareById(String shareId);
+    FileShare findShareById(Long shareId);
     
     /**
      * 根据分享ID查询分享项
      */
     @Select("SELECT * FROM share_item WHERE share_id = #{shareId}")
-    List<ShareItem> findShareItemsByShareId(String shareId);
+    List<ShareItem> findShareItemsByShareId(Long shareId);
 } 

@@ -56,9 +56,6 @@ public class ShareServiceImpl implements ShareService {
             }
         }
         
-        // 生成分享ID
-        String shareId = ShareUtil.generateShareId();
-        
         // 生成提取码
         String code = ShareUtil.generateCode();
         
@@ -67,7 +64,6 @@ public class ShareServiceImpl implements ShareService {
         
         // 创建分享记录
         FileShare fileShare = new FileShare();
-        fileShare.setShareId(shareId);
         fileShare.setUserId(userId);
         fileShare.setValidType(createShareRequest.getValidType());
         fileShare.setExpireTime(expireTime);
@@ -76,8 +72,11 @@ public class ShareServiceImpl implements ShareService {
         fileShare.setShowCount(0);
         fileShare.setIsExpired(0);
         
-        // 添加分享记录
+        // 添加分享记录（自动生成shareId并回填）
         shareMapper.addShare(fileShare);
+        
+        // 获取数据库自动生成的分享ID
+        Long shareId = fileShare.getShareId();
         
         // 添加分享项
         for (Long fileId : userFileIds) {
@@ -98,6 +97,7 @@ public class ShareServiceImpl implements ShareService {
         shareResponse.setShareKey(encryptedShareId);
         shareResponse.setShareKeyWithCode(encryptedShareIdWithCode);
         shareResponse.setCode(code);
+
         
         return Result.success(shareResponse);
     }

@@ -10,7 +10,7 @@ public class ShareItem {
     /**
      * 关联file_share.share_id
      */
-    private String shareId;
+    private Long shareId;
     
     /**
      * 关联user_file.id

@@ -21,5 +21,9 @@ public class ShareResponse {
      * 提取码
      */
     private String code;
-
+    
+    /**
+     * 分享名称
+     */
+    private String shareName;
 } 

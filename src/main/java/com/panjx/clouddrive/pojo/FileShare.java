@@ -13,6 +13,11 @@ public class FileShare {
     private Long shareId;
     
     /**
+     * 分享名称
+     */
+    private String shareName;
+    
+    /**
      * 发起分享的用户ID
      */
     private Long userId;

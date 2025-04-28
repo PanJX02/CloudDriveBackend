@@ -25,4 +25,14 @@ public class ShareController {
     public Result createShare(@RequestBody CreateShareRequest createShareRequest) {
         return shareService.createShare(createShareRequest);
     }
+    
+    /**
+     * 获取当前用户的分享列表
+     * @param showAll 是否显示全部（包括已过期），不传默认为true
+     * @return 分享列表
+     */
+    @GetMapping("/list")
+    public Result getUserShares(@RequestParam(required = false, defaultValue = "true") boolean showAll) {
+        return shareService.getUserShares(showAll);
+    }
 } 

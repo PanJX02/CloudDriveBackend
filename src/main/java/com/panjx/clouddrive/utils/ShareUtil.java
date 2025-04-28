@@ -42,7 +42,7 @@ public class ShareUtil {
      * @return 提取码
      */
     public static String generateCode() {
-        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz123456789";
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         

@@ -32,6 +32,9 @@ public interface FileMapper {
     @Select("SELECT * FROM user_file WHERE id = #{id}")
     UserFile findById(Long id);
 
+    // 根据多个ID查找用户文件列表
+    List<UserFile> findUserFilesByIds(@Param("ids") List<Long> ids);
+
     // 通过PID查找文件
     UserFile findByPid(long filePid);
     

@@ -15,6 +15,11 @@ public class FolderController {
     @Autowired
     private FolderService folderService;
 
+    /**
+     * 获取文件列表
+     * @param folderId 文件夹ID
+     * @return 文件列表
+     */
     @GetMapping("/{folderId}/files")
     public Result getFiles(@PathVariable String folderId) {
         FileList fileList = folderService.getFiles(Long.valueOf(folderId));

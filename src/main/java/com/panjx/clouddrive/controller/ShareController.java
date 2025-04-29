@@ -4,7 +4,7 @@ import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CreateShareRequest;
 import com.panjx.clouddrive.pojo.request.SaveShareFilesRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
-import com.panjx.clouddrive.service.ShareService;
+import com.panjx.clouddrive.service.share.ShareService;
 import com.panjx.clouddrive.utils.ShareUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

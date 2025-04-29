@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.share;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CreateShareRequest;

@@ -217,4 +217,31 @@
         ORDER BY fc.folder_type DESC, fc.last_update_time DESC
     </select>
 
+    <select id="findUserFilesByIds" resultType="com.panjx.clouddrive.pojo.UserFile">
+        select
+            uf.*,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.file_category as fileCategory,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus,
+            f.create_time as fileCreateTime,
+            f.last_refer_time as lastReferTime
+        from
+            user_file uf
+        LEFT JOIN file f ON uf.file_id = f.file_id
+        where
+            uf.id IN
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        order by 
+            uf.folder_type DESC, uf.last_update_time DESC
+    </select>
+
 </mapper>

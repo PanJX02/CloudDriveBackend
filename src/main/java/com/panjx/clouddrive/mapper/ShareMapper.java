@@ -62,4 +62,12 @@ public interface ShareMapper {
      */
     @Update("UPDATE file_share SET is_expired = #{isExpired} WHERE share_id = #{shareId}")
     void updateExpiredStatus(Long shareId, Integer isExpired);
+    
+    /**
+     * 更新分享查看次数
+     * @param shareId 分享ID
+     * @param showCount 新的查看次数
+     */
+    @Update("UPDATE file_share SET show_count = #{showCount} WHERE share_id = #{shareId}")
+    void updateShowCount(Long shareId, Integer showCount);
 } 

@@ -3,7 +3,6 @@ package com.panjx.clouddrive.controller;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.pojo.request.FileDetailRequest;
-import com.panjx.clouddrive.pojo.request.FileIdRequest;
 import com.panjx.clouddrive.pojo.request.FileIdsRequest;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;

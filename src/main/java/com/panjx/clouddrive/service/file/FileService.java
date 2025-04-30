@@ -41,13 +41,7 @@ public interface FileService {
      * 复制文件
      */
     Result copyFile(CopyFileRequest copyFileRequest);
-    
-    /**
-     * 收藏文件
-     * @param userFileId 用户文件ID
-     * @return 操作结果
-     */
-    Result favoriteFile(Long userFileId);
+
     
     /**
      * 批量收藏文件
@@ -55,13 +49,7 @@ public interface FileService {
      * @return 操作结果
      */
     Result favoriteFiles(List<Long> userFileIds);
-    
-    /**
-     * 取消收藏文件
-     * @param userFileId 用户文件ID
-     * @return 操作结果
-     */
-    Result unfavoriteFile(Long userFileId);
+
     
     /**
      * 批量取消收藏文件
@@ -82,13 +70,7 @@ public interface FileService {
      * @return 详细信息结果
      */
     Result getFileDetail(Long fileId);
-    
-    /**
-     * 删除文件或文件夹
-     * @param fileId 文件/文件夹ID
-     * @return 操作结果
-     */
-    Result deleteFile(Long fileId);
+
     
     /**
      * 批量删除文件或文件夹

@@ -55,11 +55,24 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileSearchService fileSearchService;
 
+    /**
+     * 处理文件上传的操作
+     * @param fileName 文件名
+     * @param fileExtension 文件后缀名
+     * @param fileSHA256 文件的SHA256值
+     * @param file_pid 文件的父文件夹ID
+     * @return 上传结果
+     */
     @Override
     public Result upload(String fileName,String fileExtension, String fileSHA256, Long file_pid) {
         return fileUploadService.upload(fileName,fileExtension,fileSHA256,file_pid);
     }
 
+    /**
+     * 处理文件上传完成的操作
+     * @param userFile 用户文件对象
+     * @return 上传结果
+     */
     @Override
     public Result uploadComplete(UserFile userFile) {
         return fileUploadService.uploadComplete(userFile);
@@ -94,16 +107,7 @@ public class FileServiceImpl implements FileService {
     public Result copyFile(CopyFileRequest copyFileRequest) {
         return fileCopyService.copyFile(copyFileRequest);
     }
-    
-    /**
-     * 收藏文件
-     * @param userFileId 用户文件ID
-     * @return 操作结果
-     */
-    @Override
-    public Result favoriteFile(Long userFileId) {
-        return fileFavoriteService.favoriteFile(userFileId);
-    }
+
     
     /**
      * 批量收藏文件
@@ -114,16 +118,7 @@ public class FileServiceImpl implements FileService {
     public Result favoriteFiles(List<Long> userFileIds) {
         return fileFavoriteService.favoriteFiles(userFileIds);
     }
-    
-    /**
-     * 取消收藏文件
-     * @param userFileId 用户文件ID
-     * @return 操作结果
-     */
-    @Override
-    public Result unfavoriteFile(Long userFileId) {
-        return fileFavoriteService.unfavoriteFile(userFileId);
-    }
+
     
     /**
      * 批量取消收藏文件
@@ -154,15 +149,6 @@ public class FileServiceImpl implements FileService {
         return fileDetailService.getFileDetail(fileId);
     }
 
-    /**
-     * 删除文件或文件夹
-     * @param fileId 文件/文件夹ID
-     * @return 操作结果
-     */
-    @Override
-    public Result deleteFile(Long fileId) {
-        return fileDeleteService.deleteFile(fileId);
-    }
     
     /**
      * 批量删除文件或文件夹

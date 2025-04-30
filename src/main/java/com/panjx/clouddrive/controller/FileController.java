@@ -45,14 +45,14 @@ public class FileController {
     @PostMapping("/move")
     public Result moveFile(@RequestBody MoveFileRequest moveFileRequest) {
         log.info("移动文件/文件夹");
-        log.info("文件ID：{} 目标文件夹ID：{}", moveFileRequest.getId(), moveFileRequest.getTargetFolderId());
+        log.info("文件ID列表：{} 目标文件夹ID：{}", moveFileRequest.getIds(), moveFileRequest.getTargetFolderId());
         return fileService.moveFile(moveFileRequest);
     }
 
     @PostMapping("/copy")
     public Result copyFile(@RequestBody CopyFileRequest copyFileRequest) {
         log.info("复制文件/文件夹");
-        log.info("文件ID：{} 目标文件夹ID：{}", copyFileRequest.getId(), copyFileRequest.getTargetFolderId());
+        log.info("文件ID列表：{} 目标文件夹ID：{}", copyFileRequest.getIds(), copyFileRequest.getTargetFolderId());
         return fileService.copyFile(copyFileRequest);
     }
 

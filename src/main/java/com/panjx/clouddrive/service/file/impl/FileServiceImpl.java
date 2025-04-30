@@ -106,6 +106,16 @@ public class FileServiceImpl implements FileService {
     }
     
     /**
+     * 批量收藏文件
+     * @param userFileIds 用户文件ID列表
+     * @return 操作结果
+     */
+    @Override
+    public Result favoriteFiles(List<Long> userFileIds) {
+        return fileFavoriteService.favoriteFiles(userFileIds);
+    }
+    
+    /**
      * 取消收藏文件
      * @param userFileId 用户文件ID
      * @return 操作结果
@@ -113,6 +123,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public Result unfavoriteFile(Long userFileId) {
         return fileFavoriteService.unfavoriteFile(userFileId);
+    }
+    
+    /**
+     * 批量取消收藏文件
+     * @param userFileIds 用户文件ID列表
+     * @return 操作结果
+     */
+    @Override
+    public Result unfavoriteFiles(List<Long> userFileIds) {
+        return fileFavoriteService.unfavoriteFiles(userFileIds);
     }
     
     /**
@@ -142,6 +162,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public Result deleteFile(Long fileId) {
         return fileDeleteService.deleteFile(fileId);
+    }
+    
+    /**
+     * 批量删除文件或文件夹
+     * @param fileIds 文件/文件夹ID列表
+     * @return 操作结果
+     */
+    @Override
+    public Result deleteFiles(List<Long> fileIds) {
+        return fileDeleteService.deleteFiles(fileIds);
     }
 
     /**

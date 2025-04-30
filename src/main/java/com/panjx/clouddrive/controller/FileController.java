@@ -4,6 +4,7 @@ import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.pojo.request.FileDetailRequest;
 import com.panjx.clouddrive.pojo.request.FileIdRequest;
+import com.panjx.clouddrive.pojo.request.FileIdsRequest;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;
 import com.panjx.clouddrive.pojo.request.UploadRequest;
@@ -57,17 +58,17 @@ public class FileController {
     }
 
     @PostMapping("/favorite")
-    public Result favoriteFile(@RequestBody FileIdRequest fileIdRequest) {
+    public Result favoriteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("收藏文件/文件夹");
-        log.info("文件ID：{}", fileIdRequest.getId());
-        return fileService.favoriteFile(fileIdRequest.getId());
+        log.info("文件ID列表：{}", fileIdsRequest.getIds());
+        return fileService.favoriteFiles(fileIdsRequest.getIds());
     }
 
     @PostMapping("/unfavorite")
-    public Result unfavoriteFile(@RequestBody FileIdRequest fileIdRequest) {
+    public Result unfavoriteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("取消收藏文件/文件夹");
-        log.info("文件ID：{}", fileIdRequest.getId());
-        return fileService.unfavoriteFile(fileIdRequest.getId());
+        log.info("文件ID列表：{}", fileIdsRequest.getIds());
+        return fileService.unfavoriteFiles(fileIdsRequest.getIds());
     }
 
     @GetMapping("/favorites")
@@ -90,14 +91,14 @@ public class FileController {
     
     /**
      * 删除文件或文件夹
-     * @param fileIdRequest 请求对象，包含文件/文件夹ID
+     * @param fileIdsRequest 请求对象，包含文件/文件夹ID列表
      * @return 删除结果
      */
     @PostMapping("/delete")
-    public Result deleteFile(@RequestBody FileIdRequest fileIdRequest) {
+    public Result deleteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("删除文件/文件夹");
-        log.info("文件ID：{}", fileIdRequest.getId());
-        return fileService.deleteFile(fileIdRequest.getId());
+        log.info("文件ID列表：{}", fileIdsRequest.getIds());
+        return fileService.deleteFiles(fileIdsRequest.getIds());
     }
     
     /**

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,22 +28,18 @@ public class FileCopyServiceImpl implements FileCopyService {
     @Override
     @Transactional
     public Result copyFile(CopyFileRequest copyFileRequest) {
-        Long sourceId = copyFileRequest.getId();
+        List<Long> userFileIds = copyFileRequest.getIds();
         Long targetFolderId = copyFileRequest.getTargetFolderId();
+        
+        // 检查请求参数
+        if (userFileIds == null || userFileIds.isEmpty()) {
+            return Result.error("未指定要复制的文件");
+        }
 
         // 获取当前用户ID
         Long userId = SecurityUtil.getCurrentUserId();
         if (userId == null) {
             return Result.error("用户未登录");
-        }
-
-        // 验证用户是否有权限操作源文件/文件夹
-        UserFile sourceFile = fileMapper.findUserFileById(sourceId);
-        if (sourceFile == null) {
-            return Result.error("源文件不存在");
-        }
-        if (!sourceFile.getUserId().equals(userId)) {
-            return Result.error("没有权限操作该文件");
         }
 
         // 验证目标文件夹是否存在（如果不是根目录）
@@ -58,53 +55,60 @@ public class FileCopyServiceImpl implements FileCopyService {
                 return Result.error("目标位置不是文件夹");
             }
         }
+        
+        List<String> errorMessages = new ArrayList<>();
+        int successCount = 0;
+        
+        // 遍历处理每个文件/文件夹
+        for (Long sourceId : userFileIds) {
+            // 验证用户是否有权限操作源文件/文件夹
+            UserFile sourceFile = fileMapper.findUserFileById(sourceId);
+            if (sourceFile == null) {
+                errorMessages.add("ID为" + sourceId + "的源文件不存在");
+                continue;
+            }
+            if (!sourceFile.getUserId().equals(userId)) {
+                errorMessages.add("没有权限操作ID为" + sourceId + "的文件");
+                continue;
+            }
 
-        // 如果是文件夹，检查是否将文件夹复制到自己的子文件夹中
-        if (sourceFile.getFolderType() == 1) {
-            // 检查目标文件夹是否是当前文件夹的子文件夹
-            List<UserFile> childFolders = fileMapper.checkIsChildFolder(sourceId, targetFolderId);
-            if (childFolders != null && !childFolders.isEmpty()) {
-                return Result.error("不能将文件夹复制到其子文件夹中");
+            // 如果是文件夹，检查是否将文件夹复制到自己的子文件夹中
+            if (sourceFile.getFolderType() == 1) {
+                // 检查目标文件夹是否是当前文件夹的子文件夹
+                List<UserFile> childFolders = fileMapper.checkIsChildFolder(sourceId, targetFolderId);
+                if (childFolders != null && !childFolders.isEmpty()) {
+                    errorMessages.add("ID为" + sourceId + "的文件夹不能复制到其子文件夹中");
+                    continue;
+                }
             }
-            
-            // 如果复制到自己所在的文件夹，需要重命名
-            if (sourceFile.getFilePid().equals(targetFolderId)) {
-                try {
+
+            // 执行复制操作
+            try {
+                boolean needRename = sourceFile.getFilePid().equals(targetFolderId);
+                
+                if (sourceFile.getFolderType() == 1) {
                     // 复制文件夹及其内容
-                    Long newFolderId = copyFolder(sourceFile, targetFolderId, true);
-                    return Result.success("复制成功");
-                } catch (Exception e) {
-                    log.error("复制文件夹失败: {}", e.getMessage(), e);
-                    return Result.error("复制文件夹失败");
-                }
-            }
-        } else {
-            // 如果是文件，且复制到相同文件夹，需要重命名
-            if (sourceFile.getFilePid().equals(targetFolderId)) {
-                try {
+                    copyFolder(sourceFile, targetFolderId, needRename);
+                } else {
                     // 复制文件
-                    copySimpleFile(sourceFile, targetFolderId, true);
-                    return Result.success("复制成功");
-                } catch (Exception e) {
-                    log.error("复制文件失败: {}", e.getMessage(), e);
-                    return Result.error("复制文件失败");
+                    copySimpleFile(sourceFile, targetFolderId, needRename);
                 }
+                successCount++;
+            } catch (Exception e) {
+                log.error("复制ID为{}的文件失败: {}", sourceId, e.getMessage(), e);
+                errorMessages.add("复制ID为" + sourceId + "的文件失败: " + e.getMessage());
             }
         }
-
-        // 执行复制操作
-        try {
-            if (sourceFile.getFolderType() == 1) {
-                // 复制文件夹及其内容
-                copyFolder(sourceFile, targetFolderId, false);
-            } else {
-                // 复制文件
-                copySimpleFile(sourceFile, targetFolderId, false);
-            }
-            return Result.success("复制成功");
-        } catch (Exception e) {
-            log.error("复制失败: {}", e.getMessage(), e);
-            return Result.error("复制失败");
+        
+        // 构建结果消息
+        if (successCount == userFileIds.size()) {
+            return Result.success("所有文件复制成功");
+        } else if (successCount > 0) {
+            String message = String.format("成功复制%d个文件，%d个文件复制失败", 
+                    successCount, userFileIds.size() - successCount);
+            return Result.success(message);
+        } else {
+            return Result.error("所有文件复制失败: " + String.join("; ", errorMessages));
         }
     }
 

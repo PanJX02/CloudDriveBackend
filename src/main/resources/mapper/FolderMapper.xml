@@ -14,6 +14,7 @@
         <result property="filePid" column="file_pid" javaType="long"/>
         <result property="folderType" column="folder_type"/>
         <result property="deleteFlag" column="delete_flag"/>
+        <result property="favoriteFlag" column="favorite_flag"/>
         <result property="recoveryTime" column="recovery_time"/>
         <result property="createTime" column="create_time"/>
         <result property="lastUpdateTime" column="last_update_time"/>
@@ -32,6 +33,7 @@
         uf.file_pid,
         uf.folder_type,
         uf.delete_flag,
+        uf.favorite_flag,
         uf.recovery_time,
         uf.create_time,
         uf.last_update_time

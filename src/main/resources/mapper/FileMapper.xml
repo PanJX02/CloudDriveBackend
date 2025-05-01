@@ -243,5 +243,13 @@
         order by 
             uf.folder_type DESC, uf.last_update_time DESC
     </select>
+    
+    <update id="updateFileName" parameterType="com.panjx.clouddrive.pojo.UserFile">
+        update user_file
+        set file_name = #{fileName},
+            file_extension = #{fileExtension},
+            last_update_time = #{lastUpdateTime}
+        where id = #{id}
+    </update>
 
 </mapper>

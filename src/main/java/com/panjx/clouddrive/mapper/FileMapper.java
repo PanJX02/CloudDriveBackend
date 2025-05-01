@@ -78,4 +78,7 @@ public interface FileMapper {
     List<UserFile> searchFiles(@Param("userId") long userId, 
                               @Param("keyword") String keyword, 
                               @Param("folderId") Long folderId);
+                              
+    // 更新文件名
+    int updateFileName(UserFile userFile);
 }

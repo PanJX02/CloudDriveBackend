@@ -58,6 +58,9 @@ public class UserFile {
      */
     private Long recoveryTime;
 
+    /**
+     * 收藏标记
+     */
     private Integer favoriteFlag;
 
     /**

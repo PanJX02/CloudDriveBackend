@@ -2,10 +2,10 @@ package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
-import com.panjx.clouddrive.pojo.request.FileDetailRequest;
 import com.panjx.clouddrive.pojo.request.FileIdsRequest;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;
+import com.panjx.clouddrive.pojo.request.RenameFileRequest;
 import com.panjx.clouddrive.pojo.request.UploadRequest;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.service.file.FileService;
@@ -63,7 +63,7 @@ public class FileController {
         return fileService.favoriteFiles(fileIdsRequest.getIds());
     }
 
-    @PostMapping("/unfavorite")
+    @PostMapping("/unfavorites")
     public Result unfavoriteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("取消收藏文件/文件夹");
         log.info("文件ID列表：{}", fileIdsRequest.getIds());
@@ -112,5 +112,15 @@ public class FileController {
                 searchRequest.getKeyword(), 
                 searchRequest.getFolderId());
         return fileService.searchFiles(searchRequest);
+    }
+
+    /**
+     * 重命名文件或文件夹
+     */
+    @PostMapping("/rename")
+    public Result renameFile(@RequestBody RenameFileRequest renameFileRequest) {
+        log.info("重命名文件/文件夹");
+        log.info("文件ID：{} 新文件名：{}", renameFileRequest.getId(), renameFileRequest.getNewFileName());
+        return fileService.renameFile(renameFileRequest);
     }
 }

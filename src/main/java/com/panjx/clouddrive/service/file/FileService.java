@@ -5,6 +5,7 @@ import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;
+import com.panjx.clouddrive.pojo.request.RenameFileRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -86,4 +87,11 @@ public interface FileService {
      * @return 搜索结果
      */
     Result searchFiles(FileSearchRequest searchRequest);
+    
+    /**
+     * 重命名文件或文件夹
+     * @param renameFileRequest 重命名请求参数
+     * @return 操作结果
+     */
+    Result renameFile(RenameFileRequest renameFileRequest);
 }

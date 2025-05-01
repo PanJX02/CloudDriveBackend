@@ -6,6 +6,7 @@ import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.pojo.request.MoveFileRequest;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
+import com.panjx.clouddrive.pojo.request.RenameFileRequest;
 import com.panjx.clouddrive.pojo.response.FileDetailResponse;
 import com.panjx.clouddrive.pojo.response.FileSearchResponse;
 import com.panjx.clouddrive.service.file.FileCopyService;
@@ -14,6 +15,7 @@ import com.panjx.clouddrive.service.file.FileDetailService;
 import com.panjx.clouddrive.service.file.FileDownloadService;
 import com.panjx.clouddrive.service.file.FileFavoriteService;
 import com.panjx.clouddrive.service.file.FileMoveService;
+import com.panjx.clouddrive.service.file.FileRenameService;
 import com.panjx.clouddrive.service.file.FileSearchService;
 import com.panjx.clouddrive.service.file.FileService;
 import com.panjx.clouddrive.service.file.FileUploadService;
@@ -54,6 +56,9 @@ public class FileServiceImpl implements FileService {
     
     @Autowired
     private FileSearchService fileSearchService;
+    
+    @Autowired
+    private FileRenameService fileRenameService;
 
     /**
      * 处理文件上传的操作
@@ -169,5 +174,15 @@ public class FileServiceImpl implements FileService {
     @Override
     public Result searchFiles(FileSearchRequest searchRequest) {
         return fileSearchService.searchFiles(searchRequest);
+    }
+
+    /**
+     * 重命名文件或文件夹
+     * @param renameFileRequest 重命名请求参数
+     * @return 操作结果
+     */
+    @Override
+    public Result renameFile(RenameFileRequest renameFileRequest) {
+        return fileRenameService.renameFile(renameFileRequest);
     }
 }

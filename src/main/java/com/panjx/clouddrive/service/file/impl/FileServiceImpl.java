@@ -138,15 +138,16 @@ public class FileServiceImpl implements FileService {
     public Result getFavoriteFiles() {
         return fileFavoriteService.getFavoriteFiles();
     }
+
     
     /**
-     * 获取文件或文件夹的详细信息
-     * @param fileId 文件/文件夹ID
+     * 批量获取文件或文件夹的详细信息
+     * @param fileIds 文件/文件夹ID列表
      * @return 详细信息结果
      */
     @Override
-    public Result getFileDetail(Long fileId) {
-        return fileDetailService.getFileDetail(fileId);
+    public Result getFileDetails(List<Long> fileIds) {
+        return fileDetailService.getFileDetails(fileIds);
     }
 
     

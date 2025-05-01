@@ -58,14 +58,26 @@ public class FileDetailResponse {
      * 子文件夹数量（仅文件夹有效）
      */
     private Integer folderCount;
-    
-    /**
-     * 预览URL（仅特定文件类型有效）
-     */
-    private String previewUrl;
+
     
     /**
      * 是否已收藏
      */
     private Boolean favoriteFlag;
+    
+    /**
+     * 文件MD5值（仅单个文件有效）
+     */
+    private String fileMd5;
+    
+    /**
+     * 文件SHA1值（仅单个文件有效）
+     */
+    private String fileSha1;
+    
+    /**
+     * 文件SHA256值（仅单个文件有效）
+     */
+    private String fileSha256;
+
 } 

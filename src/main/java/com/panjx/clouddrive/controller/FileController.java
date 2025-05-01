@@ -78,14 +78,14 @@ public class FileController {
 
     /**
      * 获取文件或文件夹的详细信息
-     * @param request 请求对象，包含文件ID
+     * @param fileIdsRequest 请求对象，包含文件ID列表
      * @return 详细信息结果
      */
     @PostMapping("/detail")
-    public Result getFileDetail(@RequestBody FileDetailRequest request) {
+    public Result getFileDetails(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("获取文件/文件夹详情");
-        log.info("文件ID：{}", request.getId());
-        return fileService.getFileDetail(request.getId());
+        log.info("文件ID列表：{}", fileIdsRequest.getIds());
+        return fileService.getFileDetails(fileIdsRequest.getIds());
     }
     
     /**

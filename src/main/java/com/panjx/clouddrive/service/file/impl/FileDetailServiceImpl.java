@@ -79,26 +79,67 @@ public class FileDetailServiceImpl implements FileDetailService {
                 // 对于单个文件夹，构建包含统计信息的响应
                 detailResponse = buildSingleFolderDetailResponse(singleFile);
             }
-             Map<String, Object> singleResult = new HashMap<>();
-             singleResult.put("detail", detailResponse);
-             if (!errorMessages.isEmpty()) {
-                 singleResult.put("errors", errorMessages);
-             }
-             return Result.success(singleResult);
+            
+            // 处理错误信息
+            if (!errorMessages.isEmpty()) {
+                // 创建包含文件详情和错误信息的结果Map
+                Map<String, Object> result = new HashMap<>();
+                // 添加FileDetailResponse中的所有字段
+                result.put("id", detailResponse.getId());
+                result.put("fileName", detailResponse.getFileName());
+                result.put("fileExtension", detailResponse.getFileExtension());
+                result.put("fileCategory", detailResponse.getFileCategory());
+                result.put("fileSize", detailResponse.getFileSize());
+                result.put("folderType", detailResponse.getFolderType());
+                result.put("filePath", detailResponse.getFilePath());
+                result.put("createTime", detailResponse.getCreateTime());
+                result.put("lastUpdateTime", detailResponse.getLastUpdateTime());
+                result.put("fileCount", detailResponse.getFileCount());
+                result.put("folderCount", detailResponse.getFolderCount());
+                result.put("favoriteFlag", detailResponse.getFavoriteFlag());
+                result.put("fileMd5", detailResponse.getFileMd5());
+                result.put("fileSha1", detailResponse.getFileSha1());
+                result.put("fileSha256", detailResponse.getFileSha256());
+                // 添加错误信息
+                result.put("errors", errorMessages);
+                return Result.success(result);
+            }
+            
+            // 直接返回详情对象
+            return Result.success(detailResponse);
         }
         
         // 4. 处理多个有效文件的情况
         FileDetailResponse summaryResponse = calculateSummaryStatistics(validUserFiles);
         summaryResponse.setFileName(determineSummaryFileName(validUserFiles, fileIds.size()));
         
-        // 构建结果
-        Map<String, Object> result = new HashMap<>();
-        result.put("detail", summaryResponse);
+        // 处理错误信息
         if (!errorMessages.isEmpty()) {
+            // 创建包含文件详情和错误信息的结果Map
+            Map<String, Object> result = new HashMap<>();
+            // 添加FileDetailResponse中的所有字段
+            result.put("id", summaryResponse.getId());
+            result.put("fileName", summaryResponse.getFileName());
+            result.put("fileExtension", summaryResponse.getFileExtension());
+            result.put("fileCategory", summaryResponse.getFileCategory());
+            result.put("fileSize", summaryResponse.getFileSize());
+            result.put("folderType", summaryResponse.getFolderType());
+            result.put("filePath", summaryResponse.getFilePath());
+            result.put("createTime", summaryResponse.getCreateTime());
+            result.put("lastUpdateTime", summaryResponse.getLastUpdateTime());
+            result.put("fileCount", summaryResponse.getFileCount());
+            result.put("folderCount", summaryResponse.getFolderCount());
+            result.put("favoriteFlag", summaryResponse.getFavoriteFlag());
+            result.put("fileMd5", summaryResponse.getFileMd5());
+            result.put("fileSha1", summaryResponse.getFileSha1());
+            result.put("fileSha256", summaryResponse.getFileSha256());
+            //
             result.put("errors", errorMessages);
+            return Result.success(result);
         }
         
-        return Result.success(result);
+        // 直接返回详情对象
+        return Result.success(summaryResponse);
     }
     
     /**
@@ -112,7 +153,7 @@ public class FileDetailServiceImpl implements FileDetailService {
         response.setFolderType(userFile.getFolderType());
         response.setCreateTime(userFile.getCreateTime());
         response.setLastUpdateTime(userFile.getLastUpdateTime());
-        response.setFavoriteFlag(userFile.getFavoriteFlag() != null && userFile.getFavoriteFlag() == 1);
+        response.setFavoriteFlag(userFile.getFavoriteFlag());
 
         // 从已连接查询的 UserFile 对象中获取物理文件信息
         response.setFileSize(userFile.getFileSize());
@@ -135,7 +176,7 @@ public class FileDetailServiceImpl implements FileDetailService {
         response.setFolderType(userFile.getFolderType());
         response.setCreateTime(userFile.getCreateTime());
         response.setLastUpdateTime(userFile.getLastUpdateTime());
-        response.setFavoriteFlag(userFile.getFavoriteFlag() != null && userFile.getFavoriteFlag() == 1);
+        response.setFavoriteFlag(userFile.getFavoriteFlag());
         
         FolderStatistics stats = new FolderStatistics();
         calculateFolderStatistics(userFile.getId(), stats);
@@ -219,7 +260,7 @@ public class FileDetailServiceImpl implements FileDetailService {
         detailResponse.setLastUpdateTime(userFile.getLastUpdateTime());
         
         // 检查是否为收藏
-        detailResponse.setFavoriteFlag(userFile.getFavoriteFlag() != null && userFile.getFavoriteFlag() == 1);
+        detailResponse.setFavoriteFlag(userFile.getFavoriteFlag());
         
         // 如果是文件，获取文件详情
         if (userFile.getFolderType() == 0) {

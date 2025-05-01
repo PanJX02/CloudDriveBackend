@@ -63,7 +63,7 @@ public class FileDetailResponse {
     /**
      * 是否已收藏
      */
-    private Boolean favoriteFlag;
+    private Integer favoriteFlag;
     
     /**
      * 文件MD5值（仅单个文件有效）

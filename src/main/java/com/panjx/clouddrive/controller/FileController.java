@@ -63,7 +63,7 @@ public class FileController {
         return fileService.favoriteFiles(fileIdsRequest.getIds());
     }
 
-    @PostMapping("/unfavorites")
+    @PostMapping("/unfavorite")
     public Result unfavoriteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
         log.info("取消收藏文件/文件夹");
         log.info("文件ID列表：{}", fileIdsRequest.getIds());

@@ -6,12 +6,14 @@ import com.panjx.clouddrive.pojo.request.SaveShareFilesRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.service.share.ShareService;
 import com.panjx.clouddrive.utils.ShareUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 文件分享控制器
  */
+@Slf4j
 @RestController
 @RequestMapping("/share")
 public class ShareController {
@@ -91,6 +93,7 @@ public class ShareController {
      */
     @PostMapping("/save")
     public Result saveShareFiles(@RequestBody SaveShareFilesRequest request) {
+        log.info("保存分享文件请求：{}", request);
         // 验证shareKey并获取shareId和code
         Long shareId;
         String code = request.getCode(); // 优先使用请求中单独提供的code
@@ -106,8 +109,9 @@ public class ShareController {
             shareId = (Long) shareInfo[0];
             
             // 如果请求中没有单独提供code，则使用从shareKey中解析出的code
-            if (code == null) {
+            if (code == null || code.isEmpty()) {
                 code = (String) shareInfo[1];
+                log.info("从shareKeyWithCode中解析出的提取码: {}", code);
             }
         } else {
             // 使用不包含提取码的shareKey
@@ -121,6 +125,8 @@ public class ShareController {
         }
         
         // 调用服务层执行保存操作
+        log.info("调用服务层保存分享文件，shareId: {}, code: {}, fileIds: {}, targetFolderId: {}",
+                shareId, code, request.getIds(), request.getTargetFolderId());
         return shareService.saveShareFiles(shareId, code, request.getIds(), request.getTargetFolderId());
     }
 } 

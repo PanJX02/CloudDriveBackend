@@ -110,7 +110,7 @@ public class ShareSaveServiceImpl implements ShareSaveService {
         
         // 验证所有请求保存的文件ID是否都属于分享内容
         for (Long fileId : fileIds) {
-            if (!shareFileIdSet.contains(fileId)) {
+            if (!isFileInShare(fileId, shareFileIdSet, fileMapper)) {
                 return Result.error("存在不属于该分享的文件");
             }
         }
@@ -152,6 +152,48 @@ public class ShareSaveServiceImpl implements ShareSaveService {
         }
     }
     
+    /**
+     * 递归检查文件是否属于分享内容
+     * 检查逻辑：
+     * 1. 文件ID直接在分享列表中
+     * 2. 文件的某个父文件夹在分享列表中
+     * 
+     * @param fileId 待检查的文件ID
+     * @param shareFileIdSet 分享文件ID集合
+     * @param fileMapper 文件Mapper
+     * @return 是否属于分享内容
+     */
+    private boolean isFileInShare(Long fileId, Set<Long> shareFileIdSet, FileMapper fileMapper) {
+        // 1. 文件ID直接在分享列表中
+        if (shareFileIdSet.contains(fileId)) {
+            return true;
+        }
+        
+        // 2. 递归检查父文件夹是否在分享列表中
+        UserFile currentFile = fileMapper.findUserFileById(fileId);
+        if (currentFile == null) {
+            return false;
+        }
+        
+        // 递归向上查找，直到根目录（pid=0）
+        Long parentId = currentFile.getFilePid();
+        while (parentId != null && parentId != 0) {
+            // 父文件夹在分享列表中
+            if (shareFileIdSet.contains(parentId)) {
+                return true;
+            }
+            
+            // 继续向上查找
+            UserFile parentFile = fileMapper.findUserFileById(parentId);
+            if (parentFile == null) {
+                break;
+            }
+            parentId = parentFile.getFilePid();
+        }
+        
+        return false;
+    }
+
     /**
      * 复制文件夹及其内容到目标位置
      * @param sourceFolder 源文件夹

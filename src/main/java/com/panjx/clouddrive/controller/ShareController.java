@@ -121,6 +121,6 @@ public class ShareController {
         }
         
         // 调用服务层执行保存操作
-        return shareService.saveShareFiles(shareId, code, request.getFileIds(), request.getTargetFolderId());
+        return shareService.saveShareFiles(shareId, code, request.getIds(), request.getTargetFolderId());
     }
 } 

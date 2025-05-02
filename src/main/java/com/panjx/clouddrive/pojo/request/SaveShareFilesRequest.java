@@ -12,7 +12,7 @@ public class SaveShareFilesRequest {
     /**
      * 要保存的文件ID列表
      */
-    private List<Long> fileIds;
+    private List<Long> ids;
     
     /**
      * 目标文件夹ID (保存到的位置)

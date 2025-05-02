@@ -135,6 +135,26 @@ public class ShareDetailServiceImpl implements ShareDetailService {
         
         // 8. 构建返回结果
         FileList fileList = new FileList();
+        
+        // 9. 清除敏感信息
+        if (resultFiles != null && !resultFiles.isEmpty()) {
+            resultFiles.forEach(file -> {
+                file.setDeleteFlag(null);
+                file.setRecoveryTime(null);
+                file.setFavoriteFlag(null);
+                file.setFileMD5(null);
+                file.setFileSHA1(null);
+                file.setFileSHA256(null);
+                file.setStorageId(null);
+                file.setFileCover(null);
+                file.setReferCount(null);
+                file.setStatus(null);
+                file.setTranscodeStatus(null);
+                file.setFileCreateTime(null);
+                file.setLastReferTime(null);
+            });
+        }
+        
         fileList.setList(resultFiles);
         
         // 创建分页信息

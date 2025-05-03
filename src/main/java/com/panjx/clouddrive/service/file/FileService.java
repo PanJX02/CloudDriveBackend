@@ -79,7 +79,7 @@ public interface FileService {
      * @param fileIds 文件/文件夹ID列表
      * @return 操作结果
      */
-    Result deleteFiles(List<Long> fileIds);
+    Result moveFilesToRecycleBin(List<Long> fileIds);
     
     /**
      * 搜索文件

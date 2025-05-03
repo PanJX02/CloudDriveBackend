@@ -61,6 +61,71 @@
         delete from user_file where id = #{id}
     </delete>
     
+    <update id="moveToRecycleBin">
+        update user_file 
+        set delete_flag = 1, 
+            recovery_time = #{recoveryTime},
+            last_update_time = unix_timestamp(now()) * 1000
+        where id = #{id}
+    </update>
+    
+    <update id="restoreFromRecycleBin">
+        update user_file 
+        set delete_flag = 0, 
+            recovery_time = null,
+            last_update_time = unix_timestamp(now()) * 1000
+        where id = #{id}
+    </update>
+    
+    <select id="getRecycleBinFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
+        SELECT
+            uf.*,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.file_category as fileCategory,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus,
+            f.create_time as fileCreateTime,
+            f.last_refer_time as lastReferTime
+        FROM
+            user_file uf
+        LEFT JOIN file f ON uf.file_id = f.file_id
+        WHERE
+            uf.user_id = #{userId} AND
+            uf.delete_flag = 1
+        ORDER BY uf.last_update_time DESC
+    </select>
+    
+    <select id="getExpiredRecycleBinFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
+        SELECT
+            uf.*,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.file_category as fileCategory,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus,
+            f.create_time as fileCreateTime,
+            f.last_refer_time as lastReferTime
+        FROM
+            user_file uf
+        LEFT JOIN file f ON uf.file_id = f.file_id
+        WHERE
+            uf.delete_flag = 1 AND
+            uf.recovery_time IS NOT NULL AND
+            uf.recovery_time &lt; #{currentTime}
+        ORDER BY uf.recovery_time ASC
+    </select>
+    
     <update id="increaseReferCount">
         update file set refer_count = refer_count + 1 ,last_refer_time=#{lastReferTime} where file.file_id = #{fileId}
     </update>

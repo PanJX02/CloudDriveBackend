@@ -6,16 +6,9 @@ import java.util.List;
 
 public interface FileDeleteService {
     /**
-     * 删除文件或文件夹
-     * @param fileId 文件/文件夹ID
-     * @return 操作结果
-     */
-    Result deleteFile(Long fileId);
-    
-    /**
-     * 批量删除文件或文件夹
+     * 批量将文件或文件夹移动到回收站（软删除）
      * @param fileIds 文件/文件夹ID列表
      * @return 操作结果
      */
-    Result deleteFiles(List<Long> fileIds);
+    Result moveToRecycleBin(List<Long> fileIds);
 } 

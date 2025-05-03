@@ -44,6 +44,18 @@ public interface FileMapper {
     // 删除文件
     void deleteUserFile(long id);
 
+    // 将文件标记为回收站
+    void moveToRecycleBin(@Param("id") long id, @Param("recoveryTime") long recoveryTime);
+
+    // 从回收站恢复文件
+    void restoreFromRecycleBin(long id);
+
+    // 获取用户回收站中的文件
+    List<UserFile> getRecycleBinFiles(long userId);
+
+    // 获取过期的回收站文件
+    List<UserFile> getExpiredRecycleBinFiles(@Param("currentTime") long currentTime);
+
     // 更新文件引用次数
     void increaseReferCount(long fileId,long lastReferTime);
 

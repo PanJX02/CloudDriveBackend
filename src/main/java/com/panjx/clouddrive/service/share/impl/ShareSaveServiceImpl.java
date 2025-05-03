@@ -158,6 +158,10 @@ public class ShareSaveServiceImpl implements ShareSaveService {
      * 1. 文件ID直接在分享列表中
      * 2. 文件的某个父文件夹在分享列表中
      * 
+     * 递归终止条件：
+     * 1. 成功终止：在向上递归过程中找到了属于分享列表的父文件夹
+     * 2. 失败终止：递归到根目录(pid=0)或找不到父文件
+     * 
      * @param fileId 待检查的文件ID
      * @param shareFileIdSet 分享文件ID集合
      * @param fileMapper 文件Mapper

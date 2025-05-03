@@ -89,18 +89,6 @@ public class FileController {
     }
     
     /**
-     * 删除文件或文件夹
-     * @param fileIdsRequest 请求对象，包含文件/文件夹ID列表
-     * @return 删除结果
-     */
-    @PostMapping("/delete")
-    public Result deleteFiles(@RequestBody FileIdsRequest fileIdsRequest) {
-        log.info("删除文件/文件夹");
-        log.info("文件ID列表：{}", fileIdsRequest.getIds());
-        return fileService.deleteFiles(fileIdsRequest.getIds());
-    }
-    
-    /**
      * 搜索文件
      * @param searchRequest 搜索请求参数
      * @return 搜索结果
@@ -122,5 +110,17 @@ public class FileController {
         log.info("重命名文件/文件夹");
         log.info("文件ID：{} 新文件名：{}", renameFileRequest.getId(), renameFileRequest.getNewFileName());
         return fileService.renameFile(renameFileRequest);
+    }
+
+    /**
+     * 将文件或文件夹移动到回收站
+     * @param fileIdsRequest 请求对象，包含文件/文件夹ID列表
+     * @return 操作结果
+     */
+    @PostMapping("/recycle")
+    public Result moveToRecycleBin(@RequestBody FileIdsRequest fileIdsRequest) {
+        log.info("将文件/文件夹移至回收站");
+        log.info("文件ID列表：{}", fileIdsRequest.getIds());
+        return fileService.moveFilesToRecycleBin(fileIdsRequest.getIds());
     }
 }

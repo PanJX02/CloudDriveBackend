@@ -1,6 +1,7 @@
 package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.request.CancelShareRequest;
 import com.panjx.clouddrive.pojo.request.CreateShareRequest;
 import com.panjx.clouddrive.pojo.request.SaveShareFilesRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
@@ -128,5 +129,51 @@ public class ShareController {
         log.info("调用服务层保存分享文件，shareId: {}, code: {}, fileIds: {}, targetFolderId: {}",
                 shareId, code, request.getIds(), request.getTargetFolderId());
         return shareService.saveShareFiles(shareId, code, request.getIds(), request.getTargetFolderId());
+    }
+    
+    /**
+     * 取消分享
+     * @param shareKey 分享的加密标识
+     * @param code 提取码(可选，当shareKey不包含提取码时需要单独提供)
+     * @return 取消结果
+     */
+    @DeleteMapping
+    public Result cancelShare(
+            @RequestParam String shareKey,
+            @RequestParam(required = false) String code) {
+        log.info("取消分享请求：shareKey={}, code={}", shareKey, code);
+        
+        // 验证shareKey并获取shareId
+        Long shareId;
+        
+        // 检查shareKey是否包含提取码
+        if (ShareUtil.isShareKeyWithCode(shareKey)) {
+            // 从shareKeyWithCode提取分享ID和提取码
+            Object[] shareInfo = ShareUtil.getShareInfoFromKeyWithCode(shareKey);
+            if (shareInfo == null) {
+                return Result.error("无效的分享链接");
+            }
+            
+            shareId = (Long) shareInfo[0];
+            
+            // 如果请求中没有单独提供code，则使用从shareKey中解析出的code
+            if (code == null || code.isEmpty()) {
+                code = (String) shareInfo[1];
+                log.info("从shareKeyWithCode中解析出的提取码: {}", code);
+            }
+        } else {
+            // 使用不包含提取码的shareKey
+            shareId = ShareUtil.getShareIdFromKey(shareKey);
+            if (shareId == null) {
+                return Result.error("无效的分享链接");
+            }
+            
+            // 使用请求中单独提供的code
+            // 如果此时code为null，由服务层进行验证
+        }
+        
+        // 调用服务层执行取消分享操作
+        log.info("调用服务层取消分享，shareId: {}, code: {}", shareId, code);
+        return shareService.cancelShare(shareId, code);
     }
 } 

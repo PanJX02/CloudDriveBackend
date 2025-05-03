@@ -3,6 +3,7 @@ package com.panjx.clouddrive.service.share.impl;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.CreateShareRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
+import com.panjx.clouddrive.service.share.ShareCancelService;
 import com.panjx.clouddrive.service.share.ShareCreateService;
 import com.panjx.clouddrive.service.share.ShareDetailService;
 import com.panjx.clouddrive.service.share.ShareListService;
@@ -33,6 +34,9 @@ public class ShareServiceImpl implements ShareService {
     
     @Autowired
     private ShareSaveService shareSaveService;
+    
+    @Autowired
+    private ShareCancelService shareCancelService;
 
     /**
      * 创建分享
@@ -80,5 +84,17 @@ public class ShareServiceImpl implements ShareService {
     @Transactional
     public Result saveShareFiles(Long shareId, String code, List<Long> fileIds, Long targetFolderId) {
         return shareSaveService.saveShareFiles(shareId, code, fileIds, targetFolderId);
+    }
+    
+    /**
+     * 取消分享
+     * @param shareId 分享ID
+     * @param code 提取码(可选，用于验证)
+     * @return 取消结果
+     */
+    @Override
+    @Transactional
+    public Result cancelShare(Long shareId, String code) {
+        return shareCancelService.cancelShare(shareId, code);
     }
 } 

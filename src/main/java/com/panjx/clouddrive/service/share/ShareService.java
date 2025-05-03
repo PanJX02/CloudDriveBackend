@@ -43,4 +43,12 @@ public interface ShareService {
      * @return 保存结果
      */
     Result saveShareFiles(Long shareId, String code, List<Long> fileIds, Long targetFolderId);
+    
+    /**
+     * 取消分享
+     * @param shareId 分享ID
+     * @param code 提取码(可选，用于验证)
+     * @return 取消结果
+     */
+    Result cancelShare(Long shareId, String code);
 } 

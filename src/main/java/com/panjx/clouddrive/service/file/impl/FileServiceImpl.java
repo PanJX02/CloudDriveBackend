@@ -157,13 +157,13 @@ public class FileServiceImpl implements FileService {
 
     
     /**
-     * 批量删除文件或文件夹
+     * 批量将文件或文件夹移动到回收站
      * @param fileIds 文件/文件夹ID列表
      * @return 操作结果
      */
     @Override
-    public Result deleteFiles(List<Long> fileIds) {
-        return fileDeleteService.deleteFiles(fileIds);
+    public Result moveFilesToRecycleBin(List<Long> fileIds) {
+        return fileDeleteService.moveToRecycleBin(fileIds);
     }
 
     /**

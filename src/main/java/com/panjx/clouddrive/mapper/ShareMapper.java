@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Delete;
 
 import java.util.List;
 
@@ -70,4 +71,18 @@ public interface ShareMapper {
      */
     @Update("UPDATE file_share SET show_count = #{showCount} WHERE share_id = #{shareId}")
     void updateShowCount(Long shareId, Integer showCount);
+    
+    /**
+     * 根据分享ID删除分享记录
+     * @param shareId 分享ID
+     */
+    @Delete("DELETE FROM file_share WHERE share_id = #{shareId}")
+    void deleteShareById(Long shareId);
+    
+    /**
+     * 根据分享ID删除相关的分享项
+     * @param shareId 分享ID
+     */
+    @Delete("DELETE FROM share_item WHERE share_id = #{shareId}")
+    void deleteShareItemsByShareId(Long shareId);
 } 

@@ -3,6 +3,8 @@ package com.panjx.clouddrive.service.file.impl;
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
+import com.panjx.clouddrive.pojo.response.FileList;
+import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.service.file.RecycleBinService;
 import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +55,18 @@ public class RecycleBinServiceImpl implements RecycleBinService {
             });
         }
         
-        return Result.success("获取回收站文件成功", recycleBinFiles);
+        // 创建FileList对象
+        FileList fileList = new FileList();
+        PageMeta pageMeta = new PageMeta(
+            recycleBinFiles != null ? recycleBinFiles.size() : 0,
+            1,
+            recycleBinFiles != null ? recycleBinFiles.size() : 0,
+            1
+        );
+        fileList.setList(recycleBinFiles);
+        fileList.setPageData(pageMeta);
+        
+        return Result.success("获取回收站文件成功", fileList);
     }
     
     /**

@@ -3,6 +3,8 @@ package com.panjx.clouddrive.service.file.impl;
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
+import com.panjx.clouddrive.pojo.response.FileList;
+import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.service.file.FileFavoriteService;
 import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -201,7 +203,34 @@ public class FileFavoriteServiceImpl implements FileFavoriteService {
         try {
             Long userId = SecurityUtil.getCurrentUserId();
             List<UserFile> favoriteFiles = fileMapper.getFavoriteFiles(userId);
-            return Result.success(favoriteFiles);
+            
+            // 处理敏感信息
+            for (UserFile file : favoriteFiles) {
+                // 屏蔽敏感字段
+                file.setUserId(null);
+                file.setFileCategory(null);
+                file.setDeleteFlag(null);
+                file.setRecoveryTime(null);
+                file.setFavoriteFlag(null);
+                file.setFileMD5(null);
+                file.setFileSHA1(null);
+                file.setFileSHA256(null);
+                file.setStorageId(null);
+                file.setFileCover(null);
+                file.setReferCount(null);
+                file.setStatus(null);
+                file.setTranscodeStatus(null);
+                file.setFileCreateTime(null);
+                file.setLastReferTime(null);
+            }
+            
+            // 使用FileList格式封装数据
+            FileList fileList = new FileList();
+            PageMeta pageMeta = new PageMeta(favoriteFiles.size(), 1, favoriteFiles.size(), 1);
+            fileList.setList(favoriteFiles);
+            fileList.setPageData(pageMeta);
+            
+            return Result.success(fileList);
         } catch (Exception e) {
             log.error("获取收藏文件列表出错", e);
             return Result.error("获取收藏文件列表失败");

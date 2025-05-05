@@ -18,12 +18,12 @@ public class User {
     /**
      * 用户名
      */
-    private String userName;
+    private String username;
 
     /**
      * 昵称
      */
-    private String nickName;
+    private String nickname;
 
     /**
      * 邮箱
@@ -37,7 +37,7 @@ public class User {
     private Integer identity;
 
     /**
-     * QQ头像链接
+     * 头像链接
      */
     private String avatar;
 
@@ -49,7 +49,7 @@ public class User {
     /**
      * 注册时间
      */
-    private Long joinTime;
+    private Long registerTime;
 
     /**
      * 最后登录时间
@@ -65,7 +65,7 @@ public class User {
     /**
      * 已用空间（字节）
      */
-    private Long useSpace;
+    private Long usedSpace;
 
     /**
      * 总空间（字节）
@@ -77,17 +77,11 @@ public class User {
      * @return 剩余可用空间
      */
     public Long getAvailableSpace() {
-        if (totalSpace == null || useSpace == null) {
+        if (totalSpace == null || usedSpace == null) {
             return 0L;
         }
-        return totalSpace - useSpace;
+        return totalSpace - usedSpace;
     }
 
-    /**
-     * 判断用户状态是否正常
-     * @return 如果状态正常返回true，否则返回false
-     */
-    public boolean isStatusNormal() {
-        return status != null && status == 1;
-    }
+
 }

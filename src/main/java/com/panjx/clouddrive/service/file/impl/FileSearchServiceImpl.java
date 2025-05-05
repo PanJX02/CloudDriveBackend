@@ -4,7 +4,8 @@ import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.FileSearchRequest;
-import com.panjx.clouddrive.pojo.response.FileSearchResponse;
+import com.panjx.clouddrive.pojo.response.FileList;
+import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.service.file.FileSearchService;
 import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -58,9 +59,16 @@ public class FileSearchServiceImpl implements FileSearchService {
             log.info("搜索完成，共找到 {} 个结果", files.size());
             
             // 构建响应
-            FileSearchResponse response = new FileSearchResponse();
-            response.setFiles(files);
-            response.setTotal(files.size());
+            FileList response = new FileList();
+            response.setList(files);
+            
+            // 设置分页信息
+            PageMeta pageMeta = new PageMeta();
+            pageMeta.setTotal(files.size());
+            pageMeta.setPageSize(files.size());
+            pageMeta.setPage(1);
+            pageMeta.setTotalPage(1);
+            response.setPageData(pageMeta);
             
             return Result.success(response);
         } catch (Exception e) {

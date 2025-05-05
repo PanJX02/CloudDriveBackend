@@ -90,15 +90,17 @@ public class FileController {
     
     /**
      * 搜索文件
-     * @param searchRequest 搜索请求参数
+     * @param keyword 搜索关键词
+     * @param folderId 搜索的文件夹ID
      * @return 搜索结果
      */
-    @PostMapping("/search")
-    public Result searchFiles(@RequestBody FileSearchRequest searchRequest) {
+    @GetMapping("/search")
+    public Result searchFiles(@RequestParam String keyword, @RequestParam(required = false) Long folderId) {
         log.info("搜索文件");
-        log.info("搜索关键词：{} 文件夹ID：{}", 
-                searchRequest.getKeyword(), 
-                searchRequest.getFolderId());
+        log.info("搜索关键词：{} 文件夹ID：{}", keyword, folderId);
+        FileSearchRequest searchRequest = new FileSearchRequest();
+        searchRequest.setKeyword(keyword);
+        searchRequest.setFolderId(folderId);
         return fileService.searchFiles(searchRequest);
     }
 

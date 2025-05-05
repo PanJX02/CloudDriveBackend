@@ -41,8 +41,8 @@ public class AuthServiceImpl implements AuthService {
             if (user.getStatus()==0){
                 return Result.error("用户被禁用");
             }
-            log.info("用户登录：{}",user.getUserName());
-            authMapper.updateLoginTime(user.getUserName(),System.currentTimeMillis());
+            log.info("用户登录：{}", user.getUsername());
+            authMapper.updateLoginTime(user.getUsername(), System.currentTimeMillis());
             
             //生成访问令牌和刷新令牌
             String accessToken = JwtUtil.generateToken(user);

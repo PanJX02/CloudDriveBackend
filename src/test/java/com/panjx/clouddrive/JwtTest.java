@@ -10,7 +10,7 @@ public class JwtTest {
     public void testGenerateToken() {
         User user = new User();
         user.setUserId(1L);
-        user.setUserName("panjx");
+        user.setUsername("panjx");
         user.setPassword("123456");
         String token = JwtUtil.generateToken(user);
         System.out.println(token);

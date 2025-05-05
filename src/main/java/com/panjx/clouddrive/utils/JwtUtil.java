@@ -8,6 +8,9 @@ import com.panjx.clouddrive.pojo.User;
 
 import java.util.Date;
 
+/**
+ * JWT工具类，用于生成和验证JWT令牌
+ */
 public class JwtUtil {
     // 密钥（实际项目中应放在配置文件中）
     private static final String SECRET_KEY = "20020920";
@@ -27,8 +30,8 @@ public class JwtUtil {
 
         return JWT.create()
                 .withSubject(user.getUserId().toString())
-                .withClaim("username", user.getUserName())
-                .withClaim("nickname", user.getNickName())
+                .withClaim("username", user.getUsername())
+                .withClaim("nickname", user.getNickname())
                 .withClaim("type", "access")
                 .withIssuedAt(now)
                 .withExpiresAt(expiryDate)
@@ -46,7 +49,7 @@ public class JwtUtil {
 
         return JWT.create()
                 .withSubject(user.getUserId().toString())
-                .withClaim("username", user.getUserName())
+                .withClaim("username", user.getUsername())
                 .withClaim("type", "refresh")
                 .withIssuedAt(now)
                 .withExpiresAt(expiryDate)

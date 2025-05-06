@@ -16,4 +16,10 @@ public interface UserMapper {
 
     //更新用户使用空间
     void updateUserSpace(long userId, long space);
+    
+    //更新用户信息
+    void updateUserInfo(User user);
+    
+    //更新用户密码
+    void updatePassword(User user);
 }

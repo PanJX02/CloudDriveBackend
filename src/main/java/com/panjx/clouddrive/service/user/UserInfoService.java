@@ -1,17 +1,11 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.user;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.User;
-import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.pojo.request.UpdatePasswordRequest;
 import com.panjx.clouddrive.pojo.request.UpdateUserInfoRequest;
-import com.panjx.clouddrive.pojo.response.TokenResponse;
 
-import org.springframework.stereotype.Service;
-
-@Service
-public interface UserService {
-
+public interface UserInfoService {
     /**
      * 根据用户名查找用户
      * @param username 用户名
@@ -25,13 +19,6 @@ public interface UserService {
      * @return 用户对象，不存在则返回null
      */
     User findById(Long userId);
-
-    /**
-     * 用户注册
-     * @param userDTO 用户数据传输对象
-     * @return 包含访问令牌和刷新令牌的响应
-     */
-    TokenResponse register(UserDTO userDTO);
     
     /**
      * 获取当前登录用户信息
@@ -52,4 +39,4 @@ public interface UserService {
      * @return 处理结果，包含成功或错误消息
      */
     Result updatePassword(UpdatePasswordRequest request);
-}
+} 

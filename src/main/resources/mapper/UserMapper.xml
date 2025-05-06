@@ -25,13 +25,31 @@
 
     <!-- 注册新用户 -->
     <insert id="add" parameterType="com.panjx.clouddrive.pojo.User">
-        INSERT INTO user (user_name, nick_name, password, join_time, identity)
+        INSERT INTO user (user_name, nick_name, password, register_time, identity)
         VALUES (#{username}, #{nickname}, #{password}, #{registerTime}, #{identity})
     </insert>
     <!--更新用户使用空间-->
     <update id="updateUserSpace">
         UPDATE user
-        SET use_space = use_space + #{space}
+        SET used_space = used_space + #{space}
+        WHERE user_id = #{userId}
+    </update>
+    
+    <!--更新用户信息-->
+    <update id="updateUserInfo" parameterType="com.panjx.clouddrive.pojo.User">
+        UPDATE user
+        <set>
+            <if test="nickname != null">nick_name = #{nickname},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+    
+    <!--更新用户密码-->
+    <update id="updatePassword" parameterType="com.panjx.clouddrive.pojo.User">
+        UPDATE user
+        SET password = #{password}
         WHERE user_id = #{userId}
     </update>
 </mapper> 

@@ -6,6 +6,7 @@ import com.panjx.clouddrive.mapper.UserMapper;
 import com.panjx.clouddrive.pojo.FileShare;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.ShareItem;
+import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.service.share.ShareSaveService;
 import com.panjx.clouddrive.utils.SecurityUtil;
@@ -121,7 +122,27 @@ public class ShareSaveServiceImpl implements ShareSaveService {
             return Result.error("获取分享文件信息失败");
         }
         
-        // 10. 执行保存操作（复制文件）
+        // 10. 计算需要保存的文件总大小，检查用户可用空间是否足够
+        long totalRequiredSpace = 0;
+        for (UserFile sourceFile : sourceFiles) {
+            if (sourceFile.getFolderType() == 1) {
+                // 对于文件夹，需要递归计算文件夹内所有文件的大小
+                totalRequiredSpace += calculateFolderSize(sourceFile.getId());
+            } else {
+                // 对于单个文件，直接获取文件大小
+                UserFile fileInfo = fileMapper.findByFileId(sourceFile.getFileId());
+                if (fileInfo != null && fileInfo.getFileSize() != null) {
+                    totalRequiredSpace += fileInfo.getFileSize();
+                }
+            }
+        }
+        
+        // 检查用户可用空间是否足够
+        if (!checkUserSpaceEnough(userId, totalRequiredSpace)) {
+            return Result.error("存储空间不足，无法保存分享文件");
+        }
+        
+        // 11. 执行保存操作（复制文件）
         int successCount = 0;
         List<String> failedFiles = new ArrayList<>();
         
@@ -142,7 +163,7 @@ public class ShareSaveServiceImpl implements ShareSaveService {
             }
         }
         
-        // 11. 返回结果
+        // 12. 返回结果
         if (successCount == 0) {
             return Result.error("所有文件保存失败");
         } else if (failedFiles.isEmpty()) {
@@ -278,5 +299,57 @@ public class ShareSaveServiceImpl implements ShareSaveService {
         }
 
         return newUserFile.getId();
+    }
+
+    /**
+     * 计算文件夹内所有文件的总大小
+     * @param folderId 文件夹ID
+     * @return 总大小（字节）
+     */
+    private long calculateFolderSize(Long folderId) {
+        long totalSize = 0;
+        
+        // 获取文件夹下所有文件和子文件夹
+        List<UserFile> children = fileMapper.findByFilePid(folderId);
+        if (children != null && !children.isEmpty()) {
+            for (UserFile child : children) {
+                if (child.getFolderType() == 1) {
+                    // 递归计算子文件夹大小
+                    totalSize += calculateFolderSize(child.getId());
+                } else {
+                    // 累加文件大小
+                    UserFile fileInfo = fileMapper.findByFileId(child.getFileId());
+                    if (fileInfo != null && fileInfo.getFileSize() != null) {
+                        totalSize += fileInfo.getFileSize();
+                    }
+                }
+            }
+        }
+        
+        return totalSize;
+    }
+    
+    /**
+     * 检查用户可用空间是否足够
+     * @param userId 用户ID
+     * @param requiredSpace 需要的空间大小（字节）
+     * @return 空间是否足够
+     */
+    private boolean checkUserSpaceEnough(Long userId, long requiredSpace) {
+        if (requiredSpace <= 0) {
+            return true; // 不需要额外空间
+        }
+        
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            return false;
+        }
+        
+        // 使用User对象的getAvailableSpace方法计算可用空间
+        Long availableSpace = user.getAvailableSpace();
+        
+        log.info("用户ID: {}, 需要空间: {}字节, 可用空间: {}字节", userId, requiredSpace, availableSpace);
+        
+        return availableSpace >= requiredSpace;
     }
 } 

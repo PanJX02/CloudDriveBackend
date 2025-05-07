@@ -3,6 +3,7 @@ package com.panjx.clouddrive.service.file.impl;
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.mapper.UserMapper;
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.CopyFileRequest;
 import com.panjx.clouddrive.service.file.FileCopyService;
@@ -56,22 +57,47 @@ public class FileCopyServiceImpl implements FileCopyService {
             }
         }
         
+        // 计算需要复制的总空间大小
+        long totalRequiredSpace = 0;
+        List<UserFile> filesToCopy = new ArrayList<>();
+        
+        // 检查并计算所有文件所需的总空间
+        for (Long sourceId : userFileIds) {
+            UserFile sourceFile = fileMapper.findUserFileById(sourceId);
+            if (sourceFile == null) {
+                continue;
+            }
+            
+            if (!sourceFile.getUserId().equals(userId)) {
+                continue;
+            }
+            
+            if (sourceFile.getFolderType() == 1) {
+                // 对于文件夹，需要递归计算文件夹内所有文件的大小
+                totalRequiredSpace += calculateFolderSize(sourceFile.getId());
+            } else {
+                // 对于单个文件，直接获取文件大小
+                UserFile fileInfo = fileMapper.findByFileId(sourceFile.getFileId());
+                if (fileInfo != null && fileInfo.getFileSize() != null) {
+                    totalRequiredSpace += fileInfo.getFileSize();
+                }
+            }
+            
+            filesToCopy.add(sourceFile);
+        }
+        
+        // 检查用户可用空间是否足够
+        if (!checkUserSpaceEnough(userId, totalRequiredSpace)) {
+            return Result.error("存储空间不足，无法完成复制操作");
+        }
+        
         List<String> errorMessages = new ArrayList<>();
         int successCount = 0;
         
         // 遍历处理每个文件/文件夹
-        for (Long sourceId : userFileIds) {
-            // 验证用户是否有权限操作源文件/文件夹
-            UserFile sourceFile = fileMapper.findUserFileById(sourceId);
-            if (sourceFile == null) {
-                errorMessages.add("ID为" + sourceId + "的源文件不存在");
-                continue;
-            }
-            if (!sourceFile.getUserId().equals(userId)) {
-                errorMessages.add("没有权限操作ID为" + sourceId + "的文件");
-                continue;
-            }
-
+        for (UserFile sourceFile : filesToCopy) {
+            Long sourceId = sourceFile.getId();
+            
             // 如果是文件夹，检查是否将文件夹复制到自己的子文件夹中
             if (sourceFile.getFolderType() == 1) {
                 // 检查目标文件夹是否是当前文件夹的子文件夹
@@ -101,15 +127,67 @@ public class FileCopyServiceImpl implements FileCopyService {
         }
         
         // 构建结果消息
-        if (successCount == userFileIds.size()) {
+        if (successCount == filesToCopy.size()) {
             return Result.success("所有文件复制成功");
         } else if (successCount > 0) {
             String message = String.format("成功复制%d个文件，%d个文件复制失败", 
-                    successCount, userFileIds.size() - successCount);
+                    successCount, filesToCopy.size() - successCount);
             return Result.success(message);
         } else {
             return Result.error("所有文件复制失败: " + String.join("; ", errorMessages));
         }
+    }
+
+    /**
+     * 计算文件夹内所有文件的总大小
+     * @param folderId 文件夹ID
+     * @return 总大小（字节）
+     */
+    private long calculateFolderSize(Long folderId) {
+        long totalSize = 0;
+        
+        // 获取文件夹下所有文件和子文件夹
+        List<UserFile> children = fileMapper.findByFilePid(folderId);
+        if (children != null && !children.isEmpty()) {
+            for (UserFile child : children) {
+                if (child.getFolderType() == 1) {
+                    // 递归计算子文件夹大小
+                    totalSize += calculateFolderSize(child.getId());
+                } else {
+                    // 累加文件大小
+                    UserFile fileInfo = fileMapper.findByFileId(child.getFileId());
+                    if (fileInfo != null && fileInfo.getFileSize() != null) {
+                        totalSize += fileInfo.getFileSize();
+                    }
+                }
+            }
+        }
+        
+        return totalSize;
+    }
+    
+    /**
+     * 检查用户可用空间是否足够
+     * @param userId 用户ID
+     * @param requiredSpace 需要的空间大小（字节）
+     * @return 空间是否足够
+     */
+    private boolean checkUserSpaceEnough(Long userId, long requiredSpace) {
+        if (requiredSpace <= 0) {
+            return true; // 不需要额外空间
+        }
+        
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            return false;
+        }
+        
+        // 使用User对象的getAvailableSpace方法计算可用空间
+        Long availableSpace = user.getAvailableSpace();
+        
+        log.info("用户ID: {}, 需要空间: {}字节, 可用空间: {}字节", userId, requiredSpace, availableSpace);
+        
+        return availableSpace >= requiredSpace;
     }
 
     /**

@@ -5,7 +5,6 @@ import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.pojo.request.UpdatePasswordRequest;
 import com.panjx.clouddrive.pojo.request.UpdateUserInfoRequest;
-import com.panjx.clouddrive.pojo.response.TokenResponse;
 import com.panjx.clouddrive.service.UserService;
 import com.panjx.clouddrive.service.user.UserInfoService;
 import com.panjx.clouddrive.service.user.UserRegistrationService;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenResponse register(UserDTO userDTO) {
+    public Result register(UserDTO userDTO) {
         return userRegistrationService.register(userDTO);
     }
     

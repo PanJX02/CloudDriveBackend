@@ -1,13 +1,13 @@
 package com.panjx.clouddrive.service.user;
 
+import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserDTO;
-import com.panjx.clouddrive.pojo.response.TokenResponse;
 
 public interface UserRegistrationService {
     /**
-     * 用户注册
+     * 用户注册（包含用户名检查）
      * @param userDTO 用户数据传输对象
-     * @return 包含访问令牌和刷新令牌的响应
+     * @return 包含访问令牌和刷新令牌的响应，或错误信息
      */
-    TokenResponse register(UserDTO userDTO);
+    Result register(UserDTO userDTO);
 } 

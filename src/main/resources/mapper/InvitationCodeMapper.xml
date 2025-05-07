@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panjx.clouddrive.mapper.InvitationCodeMapper">
+    
+    <!-- 根据邀请码字符串查询邀请码 -->
+    <select id="findByCode" resultType="com.panjx.clouddrive.pojo.InvitationCode">
+        SELECT 
+            id, 
+            invite_code as inviteCode,
+            user_id as userId,
+            admin_id as adminId,
+            created_at as createdAt,
+            expiration_time as expirationTime,
+            status,
+            usage_count as usageCount,
+            max_usage as maxUsage,
+            identity
+        FROM 
+            invitation_codes
+        WHERE 
+            invite_code = #{inviteCode}
+    </select>
+    
+    <!-- 增加邀请码使用次数 -->
+    <update id="incrementUsageCount">
+        UPDATE 
+            invitation_codes
+        SET 
+            usage_count = usage_count + 1
+        WHERE 
+            id = #{id}
+    </update>
+    
+    <!-- 添加邀请码使用记录 -->
+    <insert id="addUsageRecord">
+        INSERT INTO 
+            invite_code_usages (invite_code_id, used_by, used_at, used_ip)
+        VALUES 
+            (#{inviteCodeId}, #{usedBy}, #{usedAt}, #{usedIp})
+    </insert>
+    
+</mapper> 

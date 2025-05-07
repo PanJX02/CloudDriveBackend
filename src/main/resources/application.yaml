@@ -28,3 +28,7 @@ qiniu:
     endpoint: qiniu.65535.xin
     bucketName: myclouddrive
     region: cn-east-1
+
+# 邀请码配置
+invite-code:
+  required: true  # 是否强制要求邀请码，true-必须提供邀请码才能注册，false-可选

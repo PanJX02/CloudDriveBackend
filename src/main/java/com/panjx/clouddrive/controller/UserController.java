@@ -1,7 +1,6 @@
 package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.pojo.response.TokenResponse;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.UserDTO;
 import com.panjx.clouddrive.pojo.request.UpdatePasswordRequest;
@@ -33,17 +32,9 @@ public class UserController {
             // 获取第一个错误信息
             String errorMessage = bindingResult.getAllErrors().getFirst().getDefaultMessage();
             return Result.error(errorMessage);
-        }else{
-            //查询是否有该用户
-            User existingUser = userService.findByUsername(userDTO.getUsername());
-            if (existingUser == null){
-                //注册
-                TokenResponse tokenResponse = userService.register(userDTO);
-                return Result.success(tokenResponse);
-            }else {
-                //用户名已存在
-                return Result.error("用户名已存在");
-            }
+        } else {
+            // 直接调用服务层处理注册（包括用户名检查）
+            return userService.register(userDTO);
         }
     }
 

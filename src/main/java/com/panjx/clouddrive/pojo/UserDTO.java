@@ -32,5 +32,6 @@ public class UserDTO {
 //    @Size(min = 4, max = 4, message = "邮箱验证码长度为4位")
     private String emailCode; //邮箱验证码
 
+    private String inviteCode; // 邀请码
 
 }

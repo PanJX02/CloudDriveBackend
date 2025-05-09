@@ -31,6 +31,22 @@ public class SecurityUtil {
         }
         return null;
     }
+    
+    /**
+     * 获取当前登录管理员的ID
+     * @return 管理员ID，未登录时返回null
+     */
+    public static Long getCurrentAdminId() {
+        Authentication authentication = getAuthentication();
+        if (isValidAuthentication(authentication) && 
+            authentication.getPrincipal() != null && 
+            authentication.getPrincipal().toString().startsWith("admin_")) {
+            if (authentication.getDetails() instanceof Long) {
+                return (Long) authentication.getDetails();
+            }
+        }
+        return null;
+    }
 
     /**
      * 判断当前用户是否已认证

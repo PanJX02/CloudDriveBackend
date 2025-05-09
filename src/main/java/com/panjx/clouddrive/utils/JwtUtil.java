@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.panjx.clouddrive.pojo.Admin;
 import com.panjx.clouddrive.pojo.User;
 
 import java.util.Date;
@@ -55,6 +56,44 @@ public class JwtUtil {
                 .withExpiresAt(expiryDate)
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
+    
+    /**
+     * 生成管理员访问令牌
+     * @param admin 管理员对象
+     * @return JWT令牌
+     */
+    public static String generateToken(Admin admin) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + EXPIRE_TIME);
+
+        return JWT.create()
+                .withSubject(admin.getId().toString())
+                .withClaim("adminName", admin.getAdminName())
+                .withClaim("nickName", admin.getNickName())
+                .withClaim("identity", admin.getIdentity())
+                .withClaim("type", "admin_access")
+                .withIssuedAt(now)
+                .withExpiresAt(expiryDate)
+                .sign(Algorithm.HMAC256(SECRET_KEY));
+    }
+
+    /**
+     * 生成管理员刷新令牌
+     * @param admin 管理员对象
+     * @return 刷新令牌
+     */
+    public static String generateRefreshToken(Admin admin) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + REFRESH_EXPIRE_TIME);
+
+        return JWT.create()
+                .withSubject(admin.getId().toString())
+                .withClaim("adminName", admin.getAdminName())
+                .withClaim("type", "admin_refresh")
+                .withIssuedAt(now)
+                .withExpiresAt(expiryDate)
+                .sign(Algorithm.HMAC256(SECRET_KEY));
+    }
 
     /**
      * 验证JWT令牌
@@ -85,6 +124,26 @@ public class JwtUtil {
         DecodedJWT jwt = verifyToken(token);
         return jwt.getClaim("username").asString();
     }
+    
+    /**
+     * 从JWT令牌中获取管理员ID
+     * @param token JWT令牌
+     * @return 管理员ID
+     */
+    public static Long getAdminIdFromToken(String token) {
+        DecodedJWT jwt = verifyToken(token);
+        return Long.parseLong(jwt.getSubject());
+    }
+
+    /**
+     * 从JWT令牌中获取管理员名
+     * @param token JWT令牌
+     * @return 管理员名
+     */
+    public static String getAdminNameFromToken(String token) {
+        DecodedJWT jwt = verifyToken(token);
+        return jwt.getClaim("adminName").asString();
+    }
 
     /**
      * 检查是否为刷新令牌
@@ -95,5 +154,16 @@ public class JwtUtil {
         DecodedJWT jwt = verifyToken(token);
         String tokenType = jwt.getClaim("type").asString();
         return "refresh".equals(tokenType);
+    }
+    
+    /**
+     * 检查是否为管理员刷新令牌
+     * @param token JWT令牌
+     * @return 是否为管理员刷新令牌
+     */
+    public static boolean isAdminRefreshToken(String token) {
+        DecodedJWT jwt = verifyToken(token);
+        String tokenType = jwt.getClaim("type").asString();
+        return "admin_refresh".equals(tokenType);
     }
 }

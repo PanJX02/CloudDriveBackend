@@ -1,0 +1,36 @@
+package com.panjx.clouddrive.controller;
+
+import com.panjx.clouddrive.pojo.AdminDTO;
+import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.service.AdminAddService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private AdminAddService adminAddService;
+    
+    /**
+     * 添加管理员（仅超级管理员可操作）
+     */
+    @PostMapping
+    public Result addAdmin(@Valid @RequestBody AdminDTO adminDTO, BindingResult bindingResult) {
+        // 检查验证结果
+        log.info("添加管理员");
+        if (bindingResult.hasErrors()) {
+            // 获取第一个错误信息
+            String errorMessage = bindingResult.getAllErrors().getFirst().getDefaultMessage();
+            return Result.error(errorMessage);
+        }
+        
+        // 添加管理员
+        return adminAddService.addAdmin(adminDTO);
+    }
+} 

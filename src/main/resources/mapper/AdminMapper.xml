@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panjx.clouddrive.mapper.AdminMapper">
+    <!-- 根据管理员名查询管理员 -->
+    <select id="findByAdminName" resultType="com.panjx.clouddrive.pojo.Admin">
+        SELECT
+            id, admin_name as adminName, password, nick_name as nickName, 
+            identity, register_time as registerTime, last_login_time as lastLoginTime
+        FROM 
+            admin
+        WHERE 
+            admin_name = #{adminName}
+    </select>
+
+    <!-- 根据管理员ID查询管理员 -->
+    <select id="findById" resultType="com.panjx.clouddrive.pojo.Admin">
+        SELECT
+            id, admin_name as adminName, password, nick_name as nickName, 
+            identity, register_time as registerTime, last_login_time as lastLoginTime
+        FROM
+            admin
+        WHERE
+            id = #{id}
+    </select>
+
+    <!-- 更新管理员最后登录时间 -->
+    <update id="updateLoginTime">
+        UPDATE admin
+        SET last_login_time = #{loginTime}
+        WHERE admin_name = #{adminName}
+    </update>
+    
+    <!-- 添加管理员 -->
+    <insert id="add" parameterType="com.panjx.clouddrive.pojo.Admin">
+        INSERT INTO admin (admin_name, password, nick_name, identity, register_time, last_login_time)
+        VALUES (#{adminName}, #{password}, #{nickName}, #{identity}, #{registerTime}, #{lastLoginTime})
+    </insert>
+    
+    <!-- 统计管理员总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM admin
+    </select>
+</mapper> 

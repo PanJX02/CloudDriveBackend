@@ -1,6 +1,7 @@
 package com.panjx.clouddrive.mapper;
 
 import com.panjx.clouddrive.pojo.UserFile;
+import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -100,4 +101,7 @@ public interface FileMapper {
     
     // 分页获取所有文件（管理员功能）
     List<UserFile> getAllFiles(@Param("offset") int offset, @Param("limit") Integer limit);
+    
+    // 管理员更新文件信息
+    int updateFileInfo(UpdateFileRequest updateFileRequest);
 }

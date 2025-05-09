@@ -328,5 +328,23 @@
             f.create_time DESC
         LIMIT #{offset}, #{limit}
     </select>
+    
+    <!-- 管理员更新文件信息 -->
+    <update id="updateFileInfo" parameterType="com.panjx.clouddrive.pojo.request.UpdateFileRequest">
+        update file
+        <set>
+            <if test="fileMd5 != null">file_md5 = #{fileMd5},</if>
+            <if test="fileSha1 != null">file_sha1 = #{fileSha1},</if>
+            <if test="fileSha256 != null">file_sha256 = #{fileSha256},</if>
+            <if test="fileCategory != null">file_category = #{fileCategory},</if>
+            <if test="storageId != null">storage_id = #{storageId},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="fileCover != null">file_cover = #{fileCover},</if>
+            <if test="referCount != null">refer_count = #{referCount},</if>
+            <if test="status != null">status = #{status},</if>
+            last_refer_time = unix_timestamp(now()) * 1000
+        </set>
+        where file_id = #{fileId}
+    </update>
 
 </mapper>

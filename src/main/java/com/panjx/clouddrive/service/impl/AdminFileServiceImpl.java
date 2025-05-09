@@ -4,6 +4,7 @@ import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.UserFile;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.pojo.response.PageMeta;
 import com.panjx.clouddrive.service.AdminFileService;
@@ -39,5 +40,22 @@ public class AdminFileServiceImpl implements AdminFileService {
         FileList fileList = new FileList(files, pageMeta);
         
         return Result.success(fileList);
+    }
+    
+    @Override
+    public Result updateFileInfo(UpdateFileRequest updateFileRequest) {
+        // 检查文件是否存在
+        UserFile existingFile = fileMapper.findByFileId(updateFileRequest.getFileId());
+        if (existingFile == null) {
+            return Result.error("文件不存在");
+        }
+        
+        // 更新文件信息
+        int rows = fileMapper.updateFileInfo(updateFileRequest);
+        if (rows > 0) {
+            return Result.success("文件信息更新成功");
+        } else {
+            return Result.error("文件信息更新失败");
+        }
     }
 } 

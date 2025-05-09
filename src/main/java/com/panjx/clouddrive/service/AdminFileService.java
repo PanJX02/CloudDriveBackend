@@ -2,6 +2,7 @@ package com.panjx.clouddrive.service;
 
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 
 public interface AdminFileService {
     /**
@@ -10,4 +11,11 @@ public interface AdminFileService {
      * @return 文件列表结果
      */
     Result getAllFiles(PageRequest pageRequest);
+    
+    /**
+     * 管理员修改文件信息
+     * @param updateFileRequest 文件信息修改请求
+     * @return 修改结果
+     */
+    Result updateFileInfo(UpdateFileRequest updateFileRequest);
 } 

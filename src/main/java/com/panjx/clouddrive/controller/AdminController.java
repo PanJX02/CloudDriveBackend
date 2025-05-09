@@ -3,6 +3,7 @@ package com.panjx.clouddrive.controller;
 import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.service.AdminAddService;
 import com.panjx.clouddrive.service.AdminFileService;
 import jakarta.validation.Valid;
@@ -46,5 +47,17 @@ public class AdminController {
     public Result getAllFiles(PageRequest pageRequest) {
         log.info("管理员获取所有文件信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
         return adminFileService.getAllFiles(pageRequest);
+    }
+    
+    /**
+     * 修改文件信息
+     */
+    @PutMapping("/files")
+    public Result updateFileInfo(@RequestBody UpdateFileRequest updateFileRequest) {
+        log.info("管理员修改文件信息，文件ID：{}", updateFileRequest.getFileId());
+        if (updateFileRequest.getFileId() == null) {
+            return Result.error("文件ID不能为空");
+        }
+        return adminFileService.updateFileInfo(updateFileRequest);
     }
 } 

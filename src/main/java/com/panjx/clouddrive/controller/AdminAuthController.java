@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/admin/auth")
+@RequestMapping("/admins/auth")
 public class AdminAuthController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class AdminAuthController {
     /**
      * 管理员登录
      */
-    @PostMapping("/login")
+    @PostMapping("/session")
     public Result login(@Valid @RequestBody AdminDTO adminDTO, BindingResult bindingResult) {
         log.info("管理员登录");
         // 检查验证结果
@@ -40,7 +40,7 @@ public class AdminAuthController {
     /**
      * 刷新管理员令牌
      */
-    @PostMapping("/refresh")
+    @PutMapping("/session")
     public Result refreshToken(HttpServletRequest request) {
         log.info("刷新管理员令牌");
         return adminTokenRefreshService.refreshToken(request);

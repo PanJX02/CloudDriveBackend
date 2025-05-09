@@ -31,23 +31,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 验证token
                 System.out.println("token: " + token);
                 DecodedJWT decodedJWT = JwtUtil.verifyToken(token);
-                
-                // 获取用户ID和用户名
-                Long userId = Long.parseLong(decodedJWT.getSubject());
-                String username = decodedJWT.getClaim("username").asString();
-                
-                // 创建认证对象，这里简单地授予"USER"角色
-                UsernamePasswordAuthenticationToken authenticationToken = 
-                        new UsernamePasswordAuthenticationToken(
-                                username, 
-                                null, 
-                                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-                
-                // 将userId存储在details中
-                authenticationToken.setDetails(userId);
+                String tokenType = decodedJWT.getClaim("type").asString();
+
+                UsernamePasswordAuthenticationToken authenticationToken = null;
+
+                if ("admin_access".equals(tokenType)) {
+                    // 处理管理员token
+                    Long adminId = Long.parseLong(decodedJWT.getSubject());
+                    String adminName = decodedJWT.getClaim("adminName").asString();
+                    
+                    // 创建认证对象，授予"ROLE_ADMIN"角色
+                    // 使用 "admin_" + adminName 作为 principal，以便 SecurityUtil.getCurrentAdminId() 正确工作
+                    authenticationToken = 
+                            new UsernamePasswordAuthenticationToken(
+                                    "admin_" + adminName, 
+                                    null, 
+                                    List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+                    
+                    // 将adminId存储在details中
+                    authenticationToken.setDetails(adminId);
+
+                } else if ("access".equals(tokenType)) {
+                    // 处理用户token
+                    Long userId = Long.parseLong(decodedJWT.getSubject());
+                    String username = decodedJWT.getClaim("username").asString();
+                    
+                    // 创建认证对象，授予"ROLE_USER"角色
+                    authenticationToken = 
+                            new UsernamePasswordAuthenticationToken(
+                                    username, 
+                                    null, 
+                                    List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                    
+                    // 将userId存储在details中
+                    authenticationToken.setDetails(userId);
+                }
                 
                 // 设置认证信息到上下文
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                if (authenticationToken != null) {
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
                 
             } catch (JWTVerificationException e) {
                 // token验证失败，不设置认证信息

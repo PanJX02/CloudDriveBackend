@@ -240,46 +240,35 @@
     </select>
     
     <select id="searchFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
-        WITH RECURSIVE folder_contents (id, user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag, favorite_flag, create_time, last_update_time) AS (
+        SELECT 
+            uf.*,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus
+        FROM 
+            user_file uf
+        LEFT JOIN 
+            file f ON uf.file_id = f.file_id
+        WHERE 
+            uf.user_id = #{userId}
+            AND uf.delete_flag = 2
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    uf.file_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR uf.file_extension LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
             <if test="folderId != null">
-                SELECT id, user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag, favorite_flag, create_time, last_update_time
-                FROM user_file
-                WHERE file_pid = #{folderId} AND user_id = #{userId} AND delete_flag = 0
-                UNION ALL
-                SELECT uf.id, uf.user_id, uf.file_id, uf.file_name, uf.file_extension, uf.file_pid, uf.folder_type, uf.delete_flag, uf.favorite_flag, uf.create_time, uf.last_update_time
-                FROM user_file uf
-                JOIN folder_contents fc ON uf.file_pid = fc.id
-                WHERE fc.folder_type = 1 AND uf.user_id = #{userId} AND uf.delete_flag = 0
+                AND uf.file_pid = #{folderId}
             </if>
-            <if test="folderId == null">
-                SELECT id, user_id, file_id, file_name, file_extension, file_pid, folder_type, delete_flag, favorite_flag, create_time, last_update_time
-                FROM user_file
-                WHERE user_id = #{userId} AND delete_flag = 0
-            </if>
-        )
-        SELECT DISTINCT fc.*, 
-               f.file_md5 as fileMD5,
-               f.file_sha1 as fileSHA1,
-               f.file_sha256 as fileSHA256,
-               f.file_category as fileCategory,
-               f.storage_id as storageId,
-               f.file_size as fileSize,
-               f.file_cover as fileCover,
-               f.refer_count as referCount,
-               f.status,
-               f.transcode_status as transcodeStatus,
-               f.create_time as fileCreateTime,
-               f.last_refer_time as lastReferTime 
-        FROM folder_contents fc
-        LEFT JOIN file f ON fc.file_id = f.file_id
-        WHERE 1=1
-        <if test="keyword != null and keyword != ''">
-            AND (
-                fc.file_name LIKE CONCAT('%', #{keyword}, '%')
-                OR fc.file_extension = #{keyword}
-            )
-        </if>
-        ORDER BY fc.folder_type DESC, fc.last_update_time DESC
+        ORDER BY 
+            uf.folder_type DESC, uf.create_time DESC
     </select>
 
     <select id="findUserFilesByIds" resultType="com.panjx.clouddrive.pojo.UserFile">
@@ -316,5 +305,28 @@
             last_update_time = #{lastUpdateTime}
         where id = #{id}
     </update>
+
+    <!-- 分页获取所有文件（管理员功能） -->
+    <select id="getAllFiles" resultType="com.panjx.clouddrive.pojo.UserFile">
+        SELECT 
+            f.file_id as fileId,
+            f.file_md5 as fileMD5,
+            f.file_sha1 as fileSHA1,
+            f.file_sha256 as fileSHA256,
+            f.file_category as fileCategory,
+            f.storage_id as storageId,
+            f.file_size as fileSize,
+            f.file_cover as fileCover,
+            f.refer_count as referCount,
+            f.status,
+            f.transcode_status as transcodeStatus,
+            f.create_time as createTime,
+            f.last_refer_time as lastUpdateTime
+        FROM 
+            file f
+        ORDER BY 
+            f.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
 
 </mapper>

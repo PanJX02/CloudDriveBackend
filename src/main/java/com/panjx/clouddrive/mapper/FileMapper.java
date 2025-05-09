@@ -93,4 +93,11 @@ public interface FileMapper {
                               
     // 更新文件名
     int updateFileName(UserFile userFile);
+    
+    // 获取所有文件的总数（管理员功能）
+    @Select("SELECT COUNT(*) FROM file")
+    int countAllFiles();
+    
+    // 分页获取所有文件（管理员功能）
+    List<UserFile> getAllFiles(@Param("offset") int offset, @Param("limit") Integer limit);
 }

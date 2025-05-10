@@ -1,18 +1,11 @@
-package com.panjx.clouddrive.pojo;
+package com.panjx.clouddrive.pojo.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-/**
- * 文件分享信息实体类
- */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class FileShare {
+public class UpdateShareRequest {
     /**
-     * 分享ID
+     * 分享ID（不可修改，用于定位记录）
      */
     private Long shareId;
     

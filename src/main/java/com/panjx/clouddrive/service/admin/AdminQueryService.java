@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.admin;
 
 import com.panjx.clouddrive.pojo.Admin;
 import org.springframework.stereotype.Service;

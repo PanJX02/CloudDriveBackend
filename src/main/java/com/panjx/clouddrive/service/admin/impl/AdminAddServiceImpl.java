@@ -1,11 +1,11 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.admin.impl;
 
 import com.panjx.clouddrive.mapper.AdminMapper;
 import com.panjx.clouddrive.pojo.Admin;
 import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.service.AdminAddService;
-import com.panjx.clouddrive.service.AdminQueryService;
+import com.panjx.clouddrive.service.admin.AdminAddService;
+import com.panjx.clouddrive.service.admin.AdminQueryService;
 import com.panjx.clouddrive.utils.PasswordUtil;
 import com.panjx.clouddrive.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;

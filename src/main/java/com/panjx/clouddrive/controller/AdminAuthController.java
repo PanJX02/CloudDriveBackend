@@ -2,8 +2,7 @@ package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.service.AdminLoginService;
-import com.panjx.clouddrive.service.AdminTokenRefreshService;
+import com.panjx.clouddrive.service.admin.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminAuthController {
 
     @Autowired
-    private AdminLoginService adminLoginService;
-
-    @Autowired
-    private AdminTokenRefreshService adminTokenRefreshService;
+    private AdminService adminService;
     
     /**
      * 管理员登录
@@ -34,7 +30,7 @@ public class AdminAuthController {
             String errorMessage = bindingResult.getAllErrors().getFirst().getDefaultMessage();
             return Result.error(errorMessage);
         }
-        return adminLoginService.login(adminDTO);
+        return adminService.login(adminDTO);
     }
     
     /**
@@ -43,6 +39,6 @@ public class AdminAuthController {
     @PutMapping("/session")
     public Result refreshToken(HttpServletRequest request) {
         log.info("刷新管理员令牌");
-        return adminTokenRefreshService.refreshToken(request);
+        return adminService.refreshToken(request);
     }
 } 

@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.admin.impl;
 
 import com.panjx.clouddrive.mapper.FileMapper;
 import com.panjx.clouddrive.pojo.Result;
@@ -7,7 +7,7 @@ import com.panjx.clouddrive.pojo.request.PageRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.response.FileList;
 import com.panjx.clouddrive.pojo.response.PageMeta;
-import com.panjx.clouddrive.service.AdminFileService;
+import com.panjx.clouddrive.service.admin.AdminFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

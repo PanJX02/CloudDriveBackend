@@ -1,11 +1,11 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.admin.impl;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panjx.clouddrive.pojo.Admin;
 import com.panjx.clouddrive.pojo.Result;
-import com.panjx.clouddrive.service.AdminQueryService;
-import com.panjx.clouddrive.service.AdminTokenRefreshService;
+import com.panjx.clouddrive.service.admin.AdminQueryService;
+import com.panjx.clouddrive.service.admin.AdminTokenRefreshService;
 import com.panjx.clouddrive.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

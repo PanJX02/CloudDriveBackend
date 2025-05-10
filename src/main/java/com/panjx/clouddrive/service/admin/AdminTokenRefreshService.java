@@ -1,4 +1,4 @@
-package com.panjx.clouddrive.service;
+package com.panjx.clouddrive.service.admin;
 
 import com.panjx.clouddrive.pojo.Result;
 import jakarta.servlet.http.HttpServletRequest;

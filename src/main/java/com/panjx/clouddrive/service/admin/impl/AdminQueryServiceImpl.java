@@ -1,8 +1,8 @@
-package com.panjx.clouddrive.service.impl;
+package com.panjx.clouddrive.service.admin.impl;
 
 import com.panjx.clouddrive.mapper.AdminMapper;
 import com.panjx.clouddrive.pojo.Admin;
-import com.panjx.clouddrive.service.AdminQueryService;
+import com.panjx.clouddrive.service.admin.AdminQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

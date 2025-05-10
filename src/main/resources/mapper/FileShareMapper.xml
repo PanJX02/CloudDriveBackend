@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.panjx.clouddrive.mapper.FileShareMapper">
+    
+    <select id="countFileShares" resultType="int">
+        SELECT COUNT(*) FROM file_share
+    </select>
+    
+    <select id="getFileSharesByPage" resultType="com.panjx.clouddrive.pojo.FileShare">
+        SELECT 
+            share_id AS shareId,
+            share_name AS shareName,
+            user_id AS userId,
+            valid_type AS validType,
+            expire_time AS expireTime,
+            share_time AS shareTime,
+            code,
+            show_count AS showCount,
+            is_expired AS isExpired
+        FROM file_share
+        ORDER BY share_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <select id="getFileShareById" resultType="com.panjx.clouddrive.pojo.FileShare">
+        SELECT 
+            share_id AS shareId,
+            share_name AS shareName,
+            user_id AS userId,
+            valid_type AS validType,
+            expire_time AS expireTime,
+            share_time AS shareTime,
+            code,
+            show_count AS showCount,
+            is_expired AS isExpired
+        FROM file_share
+        WHERE share_id = #{shareId}
+    </select>
+    
+    <update id="updateFileShare" parameterType="com.panjx.clouddrive.pojo.FileShare">
+        UPDATE file_share
+        <set>
+            <if test="shareName != null">share_name = #{shareName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="validType != null">valid_type = #{validType},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="shareTime != null">share_time = #{shareTime},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="showCount != null">show_count = #{showCount},</if>
+            <if test="isExpired != null">is_expired = #{isExpired},</if>
+        </set>
+        WHERE share_id = #{shareId}
+    </update>
+    
+</mapper> 

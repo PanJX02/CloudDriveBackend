@@ -4,8 +4,8 @@ import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.PageRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
-import com.panjx.clouddrive.service.AdminAddService;
-import com.panjx.clouddrive.service.AdminFileService;
+import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
+import com.panjx.clouddrive.service.admin.AdminService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @Autowired
-    private AdminAddService adminAddService;
-    
-    @Autowired
-    private AdminFileService adminFileService;
+    private AdminService adminService;
     
     /**
      * 添加管理员（仅超级管理员可操作）
@@ -37,7 +34,7 @@ public class AdminController {
         }
         
         // 添加管理员
-        return adminAddService.addAdmin(adminDTO);
+        return adminService.addAdmin(adminDTO);
     }
     
     /**
@@ -46,7 +43,7 @@ public class AdminController {
     @GetMapping("/files")
     public Result getAllFiles(PageRequest pageRequest) {
         log.info("管理员获取所有文件信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
-        return adminFileService.getAllFiles(pageRequest);
+        return adminService.getAllFiles(pageRequest);
     }
     
     /**
@@ -58,6 +55,33 @@ public class AdminController {
         if (updateFileRequest.getFileId() == null) {
             return Result.error("文件ID不能为空");
         }
-        return adminFileService.updateFileInfo(updateFileRequest);
+        return adminService.updateFileInfo(updateFileRequest);
+    }
+
+    /**
+     * 获取所有分享信息
+     *
+     * @param pageRequest 分页请求参数
+     * @return 分页后的分享列表
+     */
+    @GetMapping("/shares")
+    public Result getAllShares(PageRequest pageRequest) {
+        log.info("管理员获取所有分享信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
+        return adminService.getAllShares(pageRequest);
+    }
+
+    /**
+     * 修改分享信息
+     *
+     * @param updateShareRequest 更新分享请求参数
+     * @return 修改结果
+     */
+    @PutMapping("/shares")
+    public Result updateShare(@RequestBody UpdateShareRequest updateShareRequest) {
+        log.info("管理员修改分享信息，分享ID：{}", updateShareRequest.getShareId());
+        if (updateShareRequest.getShareId() == null) {
+            return Result.error("分享ID不能为空");
+        }
+        return adminService.updateShare(updateShareRequest);
     }
 } 

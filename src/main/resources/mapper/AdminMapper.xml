@@ -47,7 +47,6 @@
     <select id="findAllByPage" resultType="com.panjx.clouddrive.pojo.Admin">
         SELECT id,
                admin_name      as adminName,
-               password,
                nick_name       as nickName,
                identity,
                register_time   as registerTime,
@@ -56,4 +55,16 @@
         ORDER BY id
         LIMIT #{offset}, #{pageSize}
     </select>
+    
+    <!-- 更新管理员信息 -->
+    <update id="updateAdmin" parameterType="com.panjx.clouddrive.pojo.Admin">
+        UPDATE admin
+        <set>
+            <if test="adminName != null">admin_name = #{adminName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="identity != null">identity = #{identity},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper> 

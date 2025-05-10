@@ -5,6 +5,7 @@ import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateAdminRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -113,4 +114,12 @@ public interface AdminService {
      * @return 管理员列表结果
      */
     Result getAllAdmins(PageRequest pageRequest);
+    
+    /**
+     * 更新管理员信息
+     *
+     * @param updateAdminRequest 更新管理员请求参数
+     * @return 更新结果
+     */
+    Result updateAdmin(UpdateAdminRequest updateAdminRequest);
 } 

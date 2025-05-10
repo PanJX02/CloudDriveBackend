@@ -4,6 +4,7 @@ import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateAdminRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
 import com.panjx.clouddrive.service.admin.AdminService;
@@ -117,5 +118,17 @@ public class AdminController {
     public Result getAllAdmins(PageRequest pageRequest) {
         log.info("获取所有管理员信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
         return adminService.getAllAdmins(pageRequest);
+    }
+    
+    /**
+     * 修改管理员信息
+     */
+    @PutMapping
+    public Result updateAdmin(@RequestBody UpdateAdminRequest request) {
+        log.info("修改管理员信息，管理员ID：{}", request.getId());
+        if (request.getId() == null) {
+            return Result.error("管理员ID不能为空");
+        }
+        return adminService.updateAdmin(request);
     }
 } 

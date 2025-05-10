@@ -5,6 +5,7 @@ import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.request.UpdateAdminRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
 import com.panjx.clouddrive.service.admin.*;
@@ -40,6 +41,9 @@ public class AdminServiceImpl implements AdminService {
     
     @Autowired
     private AdminListService adminListService;
+    
+    @Autowired
+    private AdminUpdateService adminUpdateService;
 
     @Override
     public Result login(AdminDTO adminDTO) {
@@ -104,5 +108,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Result getAllAdmins(PageRequest pageRequest) {
         return adminListService.getAllAdmins(pageRequest);
+    }
+    
+    @Override
+    public Result updateAdmin(UpdateAdminRequest updateAdminRequest) {
+        return adminUpdateService.updateAdmin(updateAdminRequest);
     }
 } 

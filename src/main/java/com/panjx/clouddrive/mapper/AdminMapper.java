@@ -49,4 +49,10 @@ public interface AdminMapper {
      * @return 管理员列表
      */
     List<Admin> findAllByPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
+    
+    /**
+     * 更新管理员信息
+     * @param admin 管理员对象
+     */
+    void updateAdmin(Admin admin);
 } 

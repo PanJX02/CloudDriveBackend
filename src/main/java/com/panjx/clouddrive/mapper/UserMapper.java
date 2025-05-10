@@ -34,4 +34,10 @@ public interface UserMapper {
     
     // 管理员更新用户信息
     void updateUserInfoByAdmin(User user);
+    
+    // 获取用户总数量
+    int countAllUsers();
+    
+    // 分页查询用户
+    List<User> getUsersByPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
 }

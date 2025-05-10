@@ -5,6 +5,8 @@ import com.panjx.clouddrive.pojo.Result;
 import com.panjx.clouddrive.pojo.User;
 import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
+import com.panjx.clouddrive.pojo.response.PageMeta;
+import com.panjx.clouddrive.pojo.response.UserList;
 import com.panjx.clouddrive.service.admin.AdminQueryService;
 import com.panjx.clouddrive.service.admin.AdminUserService;
 import com.panjx.clouddrive.utils.PasswordUtil;
@@ -35,34 +37,32 @@ public class AdminUserServiceImpl implements AdminUserService {
             return Result.error("未登录或登录已过期");
         }
         
-        // 分页查询（简化实现，不使用PageHelper）
+        // 分页查询
         int page = Math.max(pageRequest.getPage(), 1);
         int pageSize = Math.max(pageRequest.getPageSize(), 10);
         
-        // 获取所有用户
-        List<User> allUsers = userMapper.findAll();
+        // 获取总记录数
+        int total = userMapper.countAllUsers();
+        
+        // 计算总页数
+        int totalPage = (total + pageSize - 1) / pageSize;
+        
+        // 计算分页的offset
+        int offset = (page - 1) * pageSize;
+        
+        // 查询分页数据
+        List<User> users = userMapper.getUsersByPage(offset, pageSize);
         
         // 处理敏感信息
-        allUsers.forEach(user -> user.setPassword(null));
+        users.forEach(user -> user.setPassword(null));
         
-        // 手动实现分页
-        int total = allUsers.size();
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, total);
+        // 封装分页元数据
+        PageMeta pageMeta = new PageMeta(total, totalPage, pageSize, page);
         
-        List<User> pagedUsers = startIndex < total ? 
-                allUsers.subList(startIndex, endIndex) : 
-                List.of();
+        // 封装结果
+        UserList userList = new UserList(users, pageMeta);
         
-        // 构建分页结果
-        Map<String, Object> pageInfo = new HashMap<>();
-        pageInfo.put("list", pagedUsers);
-        pageInfo.put("total", total);
-        pageInfo.put("pageNum", page);
-        pageInfo.put("pageSize", pageSize);
-        pageInfo.put("pages", (total + pageSize - 1) / pageSize);
-        
-        return Result.success(pageInfo);
+        return Result.success(userList);
     }
 
     @Override

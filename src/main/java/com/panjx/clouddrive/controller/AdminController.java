@@ -2,6 +2,7 @@ package com.panjx.clouddrive.controller;
 
 import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
@@ -79,9 +80,33 @@ public class AdminController {
     @PutMapping("/shares")
     public Result updateShare(@RequestBody UpdateShareRequest updateShareRequest) {
         log.info("管理员修改分享信息，分享ID：{}", updateShareRequest.getShareId());
-        if (updateShareRequest.getShareId() == null) {
-            return Result.error("分享ID不能为空");
-        }
         return adminService.updateShare(updateShareRequest);
+    }
+    
+    /**
+     * 获取所有用户信息（分页）
+     */
+    @GetMapping("/users")
+    public Result getAllUsers(PageRequest pageRequest) {
+        log.info("管理员获取所有用户信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
+        return adminService.getAllUsers(pageRequest);
+    }
+    
+    /**
+     * 获取用户详情
+     */
+    @GetMapping("/users/{userId}")
+    public Result getUserDetail(@PathVariable("userId") Long userId) {
+        log.info("管理员获取用户详情，用户ID：{}", userId);
+        return adminService.getUserDetail(userId);
+    }
+    
+    /**
+     * 修改用户信息
+     */
+    @PutMapping("/users")
+    public Result updateUserInfo(@RequestBody AdminUpdateUserInfoRequest request) {
+        log.info("管理员修改用户信息，用户ID：{}", request.getUserId());
+        return adminService.updateUserInfo(request);
     }
 } 

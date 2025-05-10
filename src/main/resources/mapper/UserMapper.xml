@@ -52,4 +52,49 @@
         SET password = #{password}
         WHERE user_id = #{userId}
     </update>
+    
+    <!-- 查询所有用户 -->
+    <select id="findAll" resultType="com.panjx.clouddrive.pojo.User">
+        SELECT
+            user_id as userId,
+            user_name as username,
+            nick_name as nickname,
+            email,
+            identity,
+            avatar,
+            register_time as registerTime,
+            last_login_time as lastLoginTime,
+            status,
+            used_space as usedSpace,
+            total_space as totalSpace
+        FROM
+            user
+        ORDER BY
+            register_time DESC
+    </select>
+    
+    <!-- 根据邮箱查询用户 -->
+    <select id="findByEmail" resultType="com.panjx.clouddrive.pojo.User">
+        SELECT
+            *
+        FROM
+            user
+        WHERE
+            email = #{email}
+    </select>
+    
+    <!-- 管理员更新用户信息（可更新所有字段） -->
+    <update id="updateUserInfoByAdmin" parameterType="com.panjx.clouddrive.pojo.User">
+        UPDATE user
+        <set>
+            <if test="username != null">user_name = #{username},</if>
+            <if test="nickname != null">nick_name = #{nickname},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="identity != null">identity = #{identity},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="totalSpace != null">total_space = #{totalSpace},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
 </mapper> 

@@ -2,6 +2,9 @@ package com.panjx.clouddrive.mapper;
 
 import com.panjx.clouddrive.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -22,4 +25,13 @@ public interface UserMapper {
     
     //更新用户密码
     void updatePassword(User user);
+    
+    // 查询所有用户（管理员使用）
+    List<User> findAll();
+    
+    // 根据邮箱查询用户
+    User findByEmail(String email);
+    
+    // 管理员更新用户信息
+    void updateUserInfoByAdmin(User user);
 }

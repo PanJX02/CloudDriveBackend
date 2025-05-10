@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panjx.clouddrive.pojo.Admin;
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.response.TokenResponse;
 import com.panjx.clouddrive.service.admin.AdminQueryService;
 import com.panjx.clouddrive.service.admin.AdminTokenRefreshService;
 import com.panjx.clouddrive.utils.JwtUtil;
@@ -44,7 +45,8 @@ public class AdminTokenRefreshServiceImpl implements AdminTokenRefreshService {
             // 生成新的访问令牌
             String newAccessToken = JwtUtil.generateToken(admin);
             log.info("管理员 {} 刷新令牌成功", admin.getAdminName());
-            return Result.success(newAccessToken);
+            TokenResponse tokenResponse = new TokenResponse(newAccessToken);
+            return Result.success(tokenResponse);
 
         } catch (JWTVerificationException e) {
             log.warn("管理员刷新令牌失败: {}", e.getMessage());

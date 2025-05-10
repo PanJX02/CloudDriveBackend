@@ -3,16 +3,11 @@ package com.panjx.clouddrive.service.admin.impl;
 import com.panjx.clouddrive.pojo.Admin;
 import com.panjx.clouddrive.pojo.AdminDTO;
 import com.panjx.clouddrive.pojo.Result;
+import com.panjx.clouddrive.pojo.request.AdminUpdateUserInfoRequest;
 import com.panjx.clouddrive.pojo.request.PageRequest;
 import com.panjx.clouddrive.pojo.request.UpdateFileRequest;
 import com.panjx.clouddrive.pojo.request.UpdateShareRequest;
-import com.panjx.clouddrive.service.admin.AdminAddService;
-import com.panjx.clouddrive.service.admin.AdminFileService;
-import com.panjx.clouddrive.service.admin.AdminLoginService;
-import com.panjx.clouddrive.service.admin.AdminQueryService;
-import com.panjx.clouddrive.service.admin.AdminService;
-import com.panjx.clouddrive.service.admin.AdminShareService;
-import com.panjx.clouddrive.service.admin.AdminTokenRefreshService;
+import com.panjx.clouddrive.service.admin.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +31,9 @@ public class AdminServiceImpl implements AdminService {
     
     @Autowired
     private AdminFileService adminFileService;
+
+    @Autowired
+    private AdminUserService adminUserService;
 
     @Autowired
     private AdminTokenRefreshService adminTokenRefreshService;
@@ -83,5 +81,20 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Result refreshToken(HttpServletRequest request) {
         return adminTokenRefreshService.refreshToken(request);
+    }
+    
+    @Override
+    public Result getAllUsers(PageRequest pageRequest) {
+        return adminUserService.getAllUsers(pageRequest);
+    }
+    
+    @Override
+    public Result getUserDetail(Long userId) {
+        return adminUserService.getUserDetail(userId);
+    }
+    
+    @Override
+    public Result updateUserInfo(AdminUpdateUserInfoRequest request) {
+        return adminUserService.updateUserInfo(request);
     }
 } 

@@ -25,8 +25,8 @@
 
     <!-- 注册新用户 -->
     <insert id="add" parameterType="com.panjx.clouddrive.pojo.User">
-        INSERT INTO user (user_name, nick_name, password, register_time, identity)
-        VALUES (#{username}, #{nickname}, #{password}, #{registerTime}, #{identity})
+        INSERT INTO user (user_name, nick_name, email, identity, avatar, password, register_time, last_login_time, status, used_space, total_space)
+        VALUES (#{username}, #{nickname}, #{email}, #{identity}, #{avatar}, #{password}, #{registerTime}, #{lastLoginTime}, #{status}, #{usedSpace}, #{totalSpace})
     </insert>
     <!--更新用户使用空间-->
     <update id="updateUserSpace">

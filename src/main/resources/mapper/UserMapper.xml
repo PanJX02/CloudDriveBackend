@@ -108,22 +108,19 @@
     
     <!-- 分页查询用户 -->
     <select id="getUsersByPage" resultType="com.panjx.clouddrive.pojo.User">
-        SELECT
-            user_id as userId,
-            user_name as username,
-            nick_name as nickname,
-            email,
-            identity,
-            avatar,
-            register_time as registerTime,
-            last_login_time as lastLoginTime,
-            status,
-            used_space as usedSpace,
-            total_space as totalSpace
-        FROM
-            user
-        ORDER BY
-            register_time DESC
+        SELECT user_id         as userId,
+               user_name       as username,
+               nick_name       as nickname,
+               email,
+               identity,
+               avatar,
+               register_time   as registerTime,
+               last_login_time as lastLoginTime,
+               status,
+               used_space      as usedSpace,
+               total_space     as totalSpace
+        FROM user
+        ORDER BY user_id
         LIMIT #{offset}, #{pageSize}
     </select>
 </mapper> 

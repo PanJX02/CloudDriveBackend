@@ -109,4 +109,13 @@ public class AdminController {
         log.info("管理员修改用户信息，用户ID：{}", request.getUserId());
         return adminService.updateUserInfo(request);
     }
+    
+    /**
+     * 获取所有管理员信息（分页）
+     */
+    @GetMapping
+    public Result getAllAdmins(PageRequest pageRequest) {
+        log.info("获取所有管理员信息，页码：{}，每页数量：{}", pageRequest.getPage(), pageRequest.getPageSize());
+        return adminService.getAllAdmins(pageRequest);
+    }
 } 

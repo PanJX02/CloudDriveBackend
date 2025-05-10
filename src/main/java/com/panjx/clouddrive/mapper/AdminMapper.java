@@ -4,6 +4,8 @@ import com.panjx.clouddrive.pojo.Admin;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface AdminMapper {
     
@@ -39,4 +41,12 @@ public interface AdminMapper {
      * @return 管理员总数
      */
     int countAll();
+    
+    /**
+     * 分页查询所有管理员
+     * @param offset 偏移量
+     * @param pageSize 页大小
+     * @return 管理员列表
+     */
+    List<Admin> findAllByPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
 } 

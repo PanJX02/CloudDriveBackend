@@ -37,6 +37,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminTokenRefreshService adminTokenRefreshService;
+    
+    @Autowired
+    private AdminListService adminListService;
 
     @Override
     public Result login(AdminDTO adminDTO) {
@@ -96,5 +99,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Result updateUserInfo(AdminUpdateUserInfoRequest request) {
         return adminUserService.updateUserInfo(request);
+    }
+    
+    @Override
+    public Result getAllAdmins(PageRequest pageRequest) {
+        return adminListService.getAllAdmins(pageRequest);
     }
 } 

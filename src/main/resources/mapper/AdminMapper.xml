@@ -42,4 +42,18 @@
     <select id="countAll" resultType="int">
         SELECT COUNT(*) FROM admin
     </select>
+    
+    <!-- 分页查询所有管理员 -->
+    <select id="findAllByPage" resultType="com.panjx.clouddrive.pojo.Admin">
+        SELECT id,
+               admin_name      as adminName,
+               password,
+               nick_name       as nickName,
+               identity,
+               register_time   as registerTime,
+               last_login_time as lastLoginTime
+        FROM admin
+        ORDER BY id
+        LIMIT #{offset}, #{pageSize}
+    </select>
 </mapper> 

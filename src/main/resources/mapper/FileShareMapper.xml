@@ -18,7 +18,7 @@
             show_count AS showCount,
             is_expired AS isExpired
         FROM file_share
-        ORDER BY share_time DESC
+        ORDER BY share_id
         LIMIT #{offset}, #{limit}
     </select>
     

@@ -325,7 +325,7 @@
         FROM 
             file f
         ORDER BY 
-            f.create_time DESC
+            f.file_id
         LIMIT #{offset}, #{limit}
     </select>
     

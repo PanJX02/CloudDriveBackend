@@ -37,27 +37,23 @@ public class AdminUserServiceImpl implements AdminUserService {
             return Result.error("未登录或登录已过期");
         }
         
-        // 分页查询
-        int page = Math.max(pageRequest.getPage(), 1);
-        int pageSize = Math.max(pageRequest.getPageSize(), 10);
-        
         // 获取总记录数
         int total = userMapper.countAllUsers();
         
         // 计算总页数
-        int totalPage = (total + pageSize - 1) / pageSize;
+        int totalPage = (total + pageRequest.getPageSize() - 1) / pageRequest.getPageSize();
         
         // 计算分页的offset
-        int offset = (page - 1) * pageSize;
+        int offset = (pageRequest.getPage() - 1) * pageRequest.getPageSize();
         
         // 查询分页数据
-        List<User> users = userMapper.getUsersByPage(offset, pageSize);
+        List<User> users = userMapper.getUsersByPage(offset, pageRequest.getPageSize());
         
         // 处理敏感信息
         users.forEach(user -> user.setPassword(null));
         
         // 封装分页元数据
-        PageMeta pageMeta = new PageMeta(total, totalPage, pageSize, page);
+        PageMeta pageMeta = new PageMeta(total, totalPage, pageRequest.getPageSize(), pageRequest.getPage());
         
         // 封装结果
         UserList userList = new UserList(users, pageMeta);

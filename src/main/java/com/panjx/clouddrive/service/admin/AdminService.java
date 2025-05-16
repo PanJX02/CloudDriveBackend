@@ -122,4 +122,12 @@ public interface AdminService {
      * @return 更新结果
      */
     Result updateAdmin(UpdateAdminRequest updateAdminRequest);
+    
+    /**
+     * 删除管理员
+     *
+     * @param id 要删除的管理员ID
+     * @return 删除结果
+     */
+    Result deleteAdmin(Long id);
 } 

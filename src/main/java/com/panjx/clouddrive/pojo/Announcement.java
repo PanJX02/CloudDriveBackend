@@ -39,7 +39,7 @@ public class Announcement {
     /**
      * 发布者ID
      */
-    private Integer adminId;
+    private Integer publisherId;
     
     /**
      * 重要性：1=普通，2=重要，3=紧急

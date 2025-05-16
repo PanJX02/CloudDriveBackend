@@ -44,6 +44,9 @@ public class AdminServiceImpl implements AdminService {
     
     @Autowired
     private AdminUpdateService adminUpdateService;
+    
+    @Autowired
+    private AdminDeleteService adminDeleteService;
 
     @Override
     public Result login(AdminDTO adminDTO) {
@@ -113,5 +116,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Result updateAdmin(UpdateAdminRequest updateAdminRequest) {
         return adminUpdateService.updateAdmin(updateAdminRequest);
+    }
+    
+    @Override
+    public Result deleteAdmin(Long id) {
+        return adminDeleteService.deleteAdmin(id);
     }
 } 

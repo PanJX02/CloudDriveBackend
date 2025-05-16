@@ -43,11 +43,10 @@ public class AdminAddServiceImpl implements AdminAddService {
         admin.setAdminName(adminDTO.getAdminName());
         admin.setPassword(PasswordUtil.encode(adminDTO.getPassword()));
         admin.setNickName(adminDTO.getAdminName());
-        admin.setIdentity(1);
+        admin.setIdentity(adminDTO.getIdentity() != null ? adminDTO.getIdentity() : 1);
 
         long currentTime = System.currentTimeMillis();
         admin.setRegisterTime(currentTime);
-        admin.setLastLoginTime(currentTime);
 
         try {
             adminMapper.add(admin);

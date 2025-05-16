@@ -55,4 +55,11 @@ public interface AdminMapper {
      * @param admin 管理员对象
      */
     void updateAdmin(Admin admin);
+    
+    /**
+     * 根据ID删除管理员
+     * @param id 管理员ID
+     * @return 影响的行数
+     */
+    int deleteAdminById(Long id);
 } 

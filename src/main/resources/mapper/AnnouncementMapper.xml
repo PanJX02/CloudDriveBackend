@@ -37,4 +37,58 @@
         ORDER BY publish_time DESC
         LIMIT #{limit}
     </select>
+    
+    <!-- 获取公告总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM announcements
+    </select>
+    
+    <!-- 分页获取公告列表 -->
+    <select id="findAllByPage" resultType="com.panjx.clouddrive.pojo.Announcement">
+        SELECT * FROM announcements
+        ORDER BY importance DESC, publish_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 更新公告信息 -->
+    <update id="updateAnnouncement" parameterType="com.panjx.clouddrive.pojo.Announcement">
+        UPDATE announcements
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="expiryTime != null">expiry_time = #{expiryTime},</if>
+            <if test="importance != null">importance = #{importance},</if>
+            <if test="status != null">status = #{status},</if>
+            updated_at = #{updatedAt}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 插入公告 -->
+    <insert id="insertAnnouncement" parameterType="com.panjx.clouddrive.pojo.Announcement">
+        INSERT INTO announcements (
+            title, 
+            content, 
+            publish_time, 
+            expiry_time, 
+            publisher_id, 
+            importance, 
+            status, 
+            view_count, 
+            created_at, 
+            updated_at
+        ) VALUES (
+            #{title}, 
+            #{content}, 
+            #{publishTime}, 
+            #{expiryTime}, 
+            #{publisherId}, 
+            #{importance}, 
+            #{status}, 
+            0, 
+            #{createdAt}, 
+            #{updatedAt}
+        )
+    </insert>
 </mapper> 

@@ -67,4 +67,9 @@
         </set>
         WHERE id = #{id}
     </update>
+    
+    <!-- 根据ID删除管理员 -->
+    <delete id="deleteAdminById">
+        DELETE FROM admin WHERE id = #{id}
+    </delete>
 </mapper> 

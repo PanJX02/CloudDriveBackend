@@ -22,4 +22,11 @@ public class AdminDTO {
     @Size(min = 8, message = "密码长度至少8位")
     @Size(max = 20, message = "密码长度至多为20位")
     private String password;
+    
+    /**
+     * 身份
+     * 0: 超级管理员
+     * 1: 普通管理员
+     */
+    private Integer identity;
 } 

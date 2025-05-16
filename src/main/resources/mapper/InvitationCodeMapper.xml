@@ -2,6 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.panjx.clouddrive.mapper.InvitationCodeMapper">
     
+    <select id="countInvitationCodes" resultType="int">
+        SELECT COUNT(*) FROM invitation_codes
+    </select>
+
+    <select id="getInvitationCodesByPage" resultType="com.panjx.clouddrive.pojo.InvitationCode">
+        SELECT 
+            id,
+            invite_code as inviteCode,
+            user_id as userId,
+            admin_id as adminId,
+            created_at as createdAt,
+            expiration_time as expirationTime,
+            status,
+            usage_count as usageCount,
+            max_usage as maxUsage,
+            identity
+        FROM 
+            invitation_codes
+        ORDER BY 
+            id
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
     <!-- 根据邀请码字符串查询邀请码 -->
     <select id="findByCode" resultType="com.panjx.clouddrive.pojo.InvitationCode">
         SELECT 
@@ -38,5 +61,52 @@
         VALUES 
             (#{inviteCodeId}, #{usedBy}, #{usedAt}, #{usedIp})
     </insert>
+    
+    <!-- 更新邀请码信息 -->
+    <update id="updateInvitationCode">
+        UPDATE invitation_codes
+        <set>
+            <if test="inviteCode != null">invite_code = #{inviteCode},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="adminId != null">admin_id = #{adminId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="expirationTime != null">expiration_time = #{expirationTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="usageCount != null">usage_count = #{usageCount},</if>
+            <if test="maxUsage != null">max_usage = #{maxUsage},</if>
+            <if test="identity != null">identity = #{identity},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 创建邀请码 -->
+    <insert id="insertInvitationCode" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO invitation_codes (
+            invite_code,
+            user_id,
+            admin_id,
+            created_at,
+            expiration_time,
+            status,
+            usage_count,
+            max_usage,
+            identity
+        ) VALUES (
+            #{inviteCode},
+            #{userId},
+            #{adminId},
+            #{createdAt},
+            #{expirationTime},
+            #{status},
+            #{usageCount},
+            #{maxUsage},
+            #{identity}
+        )
+    </insert>
+    
+    <!-- 根据ID删除邀请码 -->
+    <delete id="deleteInvitationCodeById">
+        DELETE FROM invitation_codes WHERE id = #{id}
+    </delete>
     
 </mapper> 

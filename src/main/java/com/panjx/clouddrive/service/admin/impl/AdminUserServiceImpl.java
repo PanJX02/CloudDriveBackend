@@ -160,10 +160,7 @@ public class AdminUserServiceImpl implements AdminUserService {
             userMapper.updatePassword(passwordUpdate);
         }
         
-        // 获取更新后的用户信息
-        User updatedUser = userMapper.findById(request.getUserId());
-        updatedUser.setPassword(null); // 敏感信息处理
-        
-        return Result.success(updatedUser);
+        // 只返回成功响应，不返回修改后的用户信息
+        return Result.success("用户信息更新成功");
     }
 } 

@@ -27,6 +27,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 announcement.setViewCount(announcement.getViewCount() + 1);
                 announcement.setCreatedAt(null);
                 announcement.setUpdatedAt(null);
+                announcement.setPublisherId(null);
                 announcementMapper.increaseViewCount(announcement.getId());
             }
             
